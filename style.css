@@ -1,0 +1,14 @@
+body {
+    font-family: 'Chango', cursive;
+    background-color: bisque;
+}
+
+h1 {
+    color:white;
+    -webkit-text-fill-color: transparent;
+    background: -webkit-linear-gradient(transparent, transparent),
+    url(img/pattern167.png) repeat;
+    background: -o-linear-gradient(transparent, transparent);
+    -webkit-background-clip: text;
+    font-size: 60px;
+}
