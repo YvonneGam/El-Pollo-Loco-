@@ -7,6 +7,10 @@ let isMovingLeft = false;
 let bg_elements = 0;
 let lastJumpStarted = 0;
 let currentCharacterImage = 'img/character/character_move1.png'; 
+let characterGraphicsRight = ['img/character/character_move1.png', 'img/character/character_move.png', 'img/character/character_move3.png', 'img/character/character_move4.png', 'img/character/character_move5.png', 'img/character/character_move6.png'];
+let characterGraphicsLeft = ['img/character/character_move1-left.png', 'img/character/character_move2-left.png', 'img/character/character_move3-left.png', 'img/character/character_move4-left.png', 'img/character/character_move5-left.png', 'img/character/character_move6-left.png'];
+let characterGraphicIndex = 0; 
+
 
 //Game config
 let JUMP_TIME = 300; //in Millisekunden
@@ -28,22 +32,18 @@ function init() {
 function checkForRunning() {
 setInterval( function() {
     if (isMovingRight) {
-        if(currentCharacterImage == 'img/character/character_move1.png') {
-            currentCharacterImage = 'img/character/character_move2.png';
-        } else {
-            currentCharacterImage = 'img/character/character_move1.png';
-        }
+        let index = characterGraphicIndex % characterGraphicsRight.length; 
+        currentCharacterImage = characterGraphicsRight[index];
+        characterGraphicIndex = characterGraphicIndex + 1; 
     }
 
     if (isMovingLeft) {
-        if(currentCharacterImage == 'img/character/character_move1-left.png') {
-            currentCharacterImage = 'img/character/character_move2-left.png';
-        } else {
-            currentCharacterImage = 'img/character/character_move1-left.png';
-        }
+        let index = characterGraphicIndex % characterGraphicsLeft.length; 
+        currentCharacterImage = characterGraphicsLeft[index];
+        characterGraphicIndex = characterGraphicIndex + 1; 
     }
-    
-}, 200);
+
+}, 100);
 }
 
 function draw() {
