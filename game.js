@@ -1,14 +1,16 @@
 let canvas;
 let ctx; //context
-let character_x = 0;
+let character_x = 75;
 let character_y = 125;
 let isMovingRight = false;
 let isMovingLeft = false;
 let bg_elements = 0;
 let lastJumpStarted = 0;
+let currentCharacterImage = 'img/character/character_move1.png'; 
 
 //Game config
 let JUMP_TIME = 300; //in Millisekunden
+let GAME_SPEED = 6;
 
 
 
@@ -18,13 +20,34 @@ let JUMP_TIME = 300; //in Millisekunden
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
-
+    checkForRunning();
     draw()
     listenForKeys();
 }
 
+function checkForRunning() {
+setInterval( function() {
+    if (isMovingRight) {
+        if(currentCharacterImage == 'img/character/character_move1.png') {
+            currentCharacterImage = 'img/character/character_move2.png';
+        } else {
+            currentCharacterImage = 'img/character/character_move1.png';
+        }
+    }
+
+    if (isMovingLeft) {
+        if(currentCharacterImage == 'img/character/character_move1-left.png') {
+            currentCharacterImage = 'img/character/character_move2-left.png';
+        } else {
+            currentCharacterImage = 'img/character/character_move1-left.png';
+        }
+    }
+    
+}, 200);
+}
+
 function draw() {
-    drawBackground();
+    /*     drawBackground(); */
     updateFloor();
     updateCaracter();
     requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
@@ -35,7 +58,7 @@ function draw() {
  */
 function updateCaracter() {
     let base_image = new Image();
-    base_image.src = 'img/character/character1.png';
+    base_image.src = currentCharacterImage;
 
     let timePassedSinceJump = new Date().getTime() - lastJumpStarted;
     if (timePassedSinceJump < JUMP_TIME) { //Sprung
@@ -57,23 +80,24 @@ function updateCaracter() {
  */
 function updateFloor() {
     if (isMovingRight) {
-        bg_elements = bg_elements - 2;
+        bg_elements = bg_elements - GAME_SPEED;
     }
+
     if (isMovingLeft) {
-        bg_elements = bg_elements + 2;
+        bg_elements = bg_elements + GAME_SPEED;
     }
 
     let base_image_floor = new Image();
-    base_image_floor.src = 'img/floor/1.png';
+    base_image_floor.src = 'img/floor/Completo.png';
     if (base_image_floor.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
         ctx.drawImage(base_image_floor, bg_elements, -60, base_image_floor.width * 0.5, base_image_floor.height * 0.5);
     }
 }
 
-function drawBackground() {
+/* function drawBackground() {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
+} */
 
 /**
  * This function checks which key is clicked, so the animation works
@@ -86,11 +110,11 @@ function listenForKeys() {
 
         if (k == 'ArrowRight') {
             isMovingRight = true;
-            character_x = character_x + 5; //Person wird an der X-Achse um 5 px nach rechts verschoben wenn man die rechte Pfeiltaste klickt
+            /*   character_x = character_x + 5; //Person wird an der X-Achse um 5 px nach rechts verschoben wenn man die rechte Pfeiltaste klickt */
         }
         if (k == 'ArrowLeft') {
             isMovingLeft = true;
-            character_x = character_x - 5; //Person wird an der X-Achse um 5 px nach links verschoben wenn man die rechte Pfeiltaste klickt
+            /*  character_x = character_x - 5; //Person wird an der X-Achse um 5 px nach links verschoben wenn man die rechte Pfeiltaste klickt */
         }
 
         let timePassedSinceJump = new Date().getTime() - lastJumpStarted;
@@ -105,11 +129,11 @@ function listenForKeys() {
         console.log(k);
         if (k == 'ArrowRight') {
             isMoving = false;
-            character_x = character_x + 5;
+            /*    character_x = character_x + 5; */
         }
         if (k == 'ArrowLeft') {
             isMovingLeft = false;
-            character_x = character_x - 5;
+            /*      character_x = character_x - 5; */
         }
         /*         if (e.code == 'Space') {
                     isJumping = false;
