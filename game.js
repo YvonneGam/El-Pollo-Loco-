@@ -6,10 +6,10 @@ let isMovingRight = false;
 let isMovingLeft = false;
 let bg_elements = 0;
 let lastJumpStarted = 0;
-let currentCharacterImage = 'img/character/character_move1.png'; 
+let currentCharacterImage = 'img/character/character_move1.png';
 let characterGraphicsRight = ['img/character/character_move1.png', 'img/character/character_move.png', 'img/character/character_move3.png', 'img/character/character_move4.png', 'img/character/character_move5.png', 'img/character/character_move6.png'];
 let characterGraphicsLeft = ['img/character/character_move1-left.png', 'img/character/character_move2-left.png', 'img/character/character_move3-left.png', 'img/character/character_move4-left.png', 'img/character/character_move5-left.png', 'img/character/character_move6-left.png'];
-let characterGraphicIndex = 0; 
+let characterGraphicIndex = 0;
 
 
 //Game config
@@ -30,27 +30,52 @@ function init() {
 }
 
 function checkForRunning() {
-setInterval( function() {
-    if (isMovingRight) {
-        let index = characterGraphicIndex % characterGraphicsRight.length; 
-        currentCharacterImage = characterGraphicsRight[index];
-        characterGraphicIndex = characterGraphicIndex + 1; 
-    }
+    setInterval(function () {
+        if (isMovingRight) {
+            let index = characterGraphicIndex % characterGraphicsRight.length;
+            currentCharacterImage = characterGraphicsRight[index];
+            characterGraphicIndex = characterGraphicIndex + 1;
+        }
 
-    if (isMovingLeft) {
-        let index = characterGraphicIndex % characterGraphicsLeft.length; 
-        currentCharacterImage = characterGraphicsLeft[index];
-        characterGraphicIndex = characterGraphicIndex + 1; 
-    }
+        if (isMovingLeft) {
+            let index = characterGraphicIndex % characterGraphicsLeft.length;
+            currentCharacterImage = characterGraphicsLeft[index];
+            characterGraphicIndex = characterGraphicIndex + 1;
+        }
 
-}, 100);
+    }, 100);
 }
 
 function draw() {
     /*     drawBackground(); */
     updateFloor();
+    drawChicken();
     updateCaracter();
     requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
+}
+
+function drawChicken() {
+    let chickens = [
+        createChicken(1, 300, 350), //type, position_x, position_y
+        createChicken(2, 500, 345),
+        createChicken(1, 750, 350),
+        createChicken(1, 1050, 350),
+        createChicken(2, 1350, 345)
+    ];
+
+    for (i = 0; i < chickens.length; i = i + 1) {
+        let chicken = chickens[i];
+        addBackgroundObject(chicken.img, chicken.position_x, chicken.position_y, chicken.scale);
+    }
+}
+
+function createChicken(type, position_x, position_y) {
+    return { //JSON for all chicken
+        "img": "img/littlechicken/littlechicken" + type + ".png",
+        "position_x": position_x,
+        "position_y": position_y,
+        "scale": 0.25,
+    };
 }
 
 /**
@@ -86,11 +111,16 @@ function updateFloor() {
     if (isMovingLeft) {
         bg_elements = bg_elements + GAME_SPEED;
     }
+    //evtl For-Schleife wie bei Video17
+    addBackgroundObject('img/floor/Completo.png', 0, -60, 0.5);
+    addBackgroundObject('img/floor/Completo.png', 1500, -60, 0.5);
+}
 
+function addBackgroundObject(src, offsetX, offsetY, scale) {
     let base_image_floor = new Image();
-    base_image_floor.src = 'img/floor/Completo.png';
+    base_image_floor.src = src;
     if (base_image_floor.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
-        ctx.drawImage(base_image_floor, bg_elements, -60, base_image_floor.width * 0.5, base_image_floor.height * 0.5);
+        ctx.drawImage(base_image_floor, offsetX + bg_elements, offsetY, base_image_floor.width * scale, base_image_floor.height * scale);
     }
 }
 
