@@ -2,6 +2,7 @@ let canvas;
 let ctx; //context
 let character_x = 75;
 let character_y = 125;
+let character_energy = 100; 
 let isMovingRight = false;
 let isMovingLeft = false;
 let bg_elements = 0;
@@ -10,12 +11,14 @@ let currentCharacterImage = 'img/character/character_move1.png';
 let characterGraphicsRight = ['img/character/character_move1.png', 'img/character/character_move.png', 'img/character/character_move3.png', 'img/character/character_move4.png', 'img/character/character_move5.png', 'img/character/character_move6.png'];
 let characterGraphicsLeft = ['img/character/character_move1-left.png', 'img/character/character_move2-left.png', 'img/character/character_move3-left.png', 'img/character/character_move4-left.png', 'img/character/character_move5-left.png', 'img/character/character_move6-left.png'];
 let characterGraphicIndex = 0;
+let chickens = [];
 
 
 //Game config
 let JUMP_TIME = 300; //in Millisekunden
 let GAME_SPEED = 6;
-
+let AUDIO_RUNNING = new Audio('audio/running_mp3.mp3');
+let AUDIO_JUMPING = new Audio('audio/jump.mp3');
 
 
 
@@ -24,24 +27,62 @@ let GAME_SPEED = 6;
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+    createChickenList();
     checkForRunning();
     draw()
     listenForKeys();
+    calculateChickenPosition();
+    checkForCollision();
+}
+function checkForCollision() {
+    setInterval(function () {
+        for (let i = 0; i < chickens.length; i++) {
+            let chicken = chickens[i];
+            if ((chicken.position_x - 40) < character_x && (chicken.position_x + 40) > character_x) { //Ist die Koordinate der Chicken-10 kleiner als die x-Koordiante der Person & ist die Koordinate der Chicken+10 größer als die Person, also 20 Unterschied, dann Kollision!
+                character_energy--; //1 Energie-Element wird abgezogen bei Collision
+            }
+        }
+    }, 100);
+}
+
+
+function calculateChickenPosition() {
+    setInterval(function () {
+        for (let i = 0; i < chickens.length; i++) {
+            let chicken = chickens[i];
+            chicken.position_x = chicken.position_x - chicken.speed;
+        }
+    }, 50);
+}
+
+
+function createChickenList() {
+    chickens = [
+        createChicken(1, 300, 350), //type, position_x, position_y
+        createChicken(2, 500, 345),
+        createChicken(1, 750, 350),
+        createChicken(1, 1050, 350),
+        createChicken(2, 1350, 345)
+    ];
 }
 
 function checkForRunning() {
     setInterval(function () {
         if (isMovingRight) {
+            AUDIO_RUNNING.play();
             let index = characterGraphicIndex % characterGraphicsRight.length;
             currentCharacterImage = characterGraphicsRight[index];
             characterGraphicIndex = characterGraphicIndex + 1;
         }
 
         if (isMovingLeft) {
+            AUDIO_RUNNING.play();
             let index = characterGraphicIndex % characterGraphicsLeft.length;
             currentCharacterImage = characterGraphicsLeft[index];
             characterGraphicIndex = characterGraphicIndex + 1;
         }
+        if (!isMovingRight && !isMovingLeft) // Ausrufezeichen steht dafür dass er sich nicht!! bewegt
+            AUDIO_RUNNING.pause();
 
     }, 100);
 }
@@ -52,17 +93,23 @@ function draw() {
     drawChicken();
     updateCaracter();
     requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
+    drawEnergyBar();
 }
 
-function drawChicken() {
-    let chickens = [
-        createChicken(1, 300, 350), //type, position_x, position_y
-        createChicken(2, 500, 345),
-        createChicken(1, 750, 350),
-        createChicken(1, 1050, 350),
-        createChicken(2, 1350, 345)
-    ];
+function drawEnergyBar() {
+    ctx.globalAlpha = 0.7; 
+    ctx.fillStyle = "black"
+    ctx.fillRect(440, 30, 230, 60) //x-koordinate, y-koordinate, breite, höhe
 
+    ctx.globalAlpha = 1; 
+    ctx.fillStyle = "darkred"
+    ctx.fillRect(455, 40, 2 * character_energy, 40) //x-koordinate, y-koordinate, breite, höhe
+}
+
+/**
+ * position of all small chickens
+ */
+function drawChicken() {
     for (i = 0; i < chickens.length; i = i + 1) {
         let chicken = chickens[i];
         addBackgroundObject(chicken.img, chicken.position_x, chicken.position_y, chicken.scale);
@@ -75,6 +122,7 @@ function createChicken(type, position_x, position_y) {
         "position_x": position_x,
         "position_y": position_y,
         "scale": 0.25,
+        "speed": (Math.random() * 5)
     };
 }
 
@@ -149,6 +197,7 @@ function listenForKeys() {
 
         let timePassedSinceJump = new Date().getTime() - lastJumpStarted;
         if (e.code == 'Space' && timePassedSinceJump > JUMP_TIME * 2) {
+            AUDIO_JUMPING.play();
             lastJumpStarted = new Date().getTime();
         }
     });
