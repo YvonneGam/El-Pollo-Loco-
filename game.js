@@ -2,16 +2,19 @@ let canvas;
 let ctx; //context
 let character_x = 75;
 let character_y = 125;
-let character_energy = 100; 
+let character_energy = 100;
 let isMovingRight = false;
 let isMovingLeft = false;
 let bg_elements = 0;
 let lastJumpStarted = 0;
 let currentCharacterImage = 'img/character/character_move1.png';
-let characterGraphicsRight = ['img/character/character_move1.png', 'img/character/character_move.png', 'img/character/character_move3.png', 'img/character/character_move4.png', 'img/character/character_move5.png', 'img/character/character_move6.png'];
+let characterGraphicsRight = ['img/character/character_move1.png', 'img/character/character_move2.png', 'img/character/character_move3.png', 'img/character/character_move4.png', 'img/character/character_move5.png', 'img/character/character_move6.png'];
 let characterGraphicsLeft = ['img/character/character_move1-left.png', 'img/character/character_move2-left.png', 'img/character/character_move3-left.png', 'img/character/character_move4-left.png', 'img/character/character_move5-left.png', 'img/character/character_move6-left.png'];
 let characterGraphicIndex = 0;
 let chickens = [];
+let placedBottles = [1000, 1800, 2300, 2800, 3100];
+let collectedBottles = 0;
+let bottleThrowTime = 0;
 
 
 //Game config
@@ -19,6 +22,7 @@ let JUMP_TIME = 300; //in Millisekunden
 let GAME_SPEED = 6;
 let AUDIO_RUNNING = new Audio('audio/running_mp3.mp3');
 let AUDIO_JUMPING = new Audio('audio/jump.mp3');
+let AUDIO_BOTTLE = new Audio('audio/bottle.mp3');
 
 
 
@@ -34,14 +38,32 @@ function init() {
     calculateChickenPosition();
     checkForCollision();
 }
+
+/**
+ * This function checks when the character collide with the items
+ */
 function checkForCollision() {
     setInterval(function () {
+        // Check chicken
         for (let i = 0; i < chickens.length; i++) {
             let chicken = chickens[i];
-            if ((chicken.position_x - 40) < character_x && (chicken.position_x + 40) > character_x) { //Ist die Koordinate der Chicken-10 kleiner als die x-Koordiante der Person & ist die Koordinate der Chicken+10 größer als die Person, also 20 Unterschied, dann Kollision!
-                character_energy--; //1 Energie-Element wird abgezogen bei Collision
+            let chicken_x = chicken.position_x + bg_elements; //Position des Hühnchens + Position des Hintergrundes, da nur er sich verschiebt und nicht der Character
+            if ((chicken_x - 40) < character_x && (chicken_x + 40) > character_x) { //Ist die Koordinate der Chicken-10 kleiner als die x-Koordiante der Person & ist die Koordinate der Chicken+10 größer als die Person, also 20 Unterschied, dann Kollision!
+                if (character_y > 95) //Wenn die y-Koordinate des Characters größer als 95 ist dann wird keine Energie abgezogen, da man dann hoch genug gesprungen ist
+                    character_energy--; //1 Energie-Element wird abgezogen bei Collision
             }
         }
+        //check bottles
+        for (let i = 0; i < placedBottles.length; i++) {
+            let bottle_x = placedBottles[i] + bg_elements;
+            if ((bottle_x - 40) < character_x && (bottle_x + 40) > character_x) { //Ist die Koordinate der Chicken-10 kleiner als die x-Koordiante der Person & ist die Koordinate der Chicken+10 größer als die Person, also 20 Unterschied, dann Kollision!
+                if (character_y > 95) //Wenn die y-Koordinate des Characters größer als 95 ist dann wird keine Energie abgezogen, da man dann hoch genug gesprungen ist
+                    placedBottles.splice(i, 1);
+                AUDIO_BOTTLE.play();
+                collectedBottles++;
+            }
+        }
+
     }, 100);
 }
 
@@ -58,11 +80,15 @@ function calculateChickenPosition() {
 
 function createChickenList() {
     chickens = [
-        createChicken(1, 300, 350), //type, position_x, position_y
-        createChicken(2, 500, 345),
-        createChicken(1, 750, 350),
+        createChicken(1, 650, 350), //type, position_x, position_y
+        createChicken(2, 800, 345),
         createChicken(1, 1050, 350),
-        createChicken(2, 1350, 345)
+        createChicken(2, 1600, 345),
+        createChicken(1, 2000, 350),
+        createChicken(2, 2300, 345),
+        createChicken(2, 2700, 345),
+        createChicken(1, 3200, 350),
+        createChicken(1, 4100, 350)
     ];
 }
 
@@ -90,18 +116,53 @@ function checkForRunning() {
 function draw() {
     /*     drawBackground(); */
     updateFloor();
+    drawBottles();
     drawChicken();
     updateCaracter();
     requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
     drawEnergyBar();
+    drawInfo();
+    drawThrowBottle();
+}
+
+function drawThrowBottle() {
+    if (bottleThrowTime) { // bottleThrowTime = true, hier wird gecheckt ob "b" gedrückt wurde
+        let time = new Date().getTime() - bottleThrowTime; //Genaue ms die vergangen sind seit "b" gedrückt wurde
+        let gravity = Math.pow(9.81, time / 300); //so geht der Wurf nicht steil nach oben sondern 
+        let bottle_x = 97 + (time * 0.6);
+        let bottle_y = 300 - (time * 0.4 - gravity);
+
+        let base_image = new Image();
+        base_image.src = 'img/bottles/1.Marcador.png';
+        if (base_image.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
+            ctx.drawImage(base_image, bottle_x, bottle_y, base_image.width * 0.20, base_image.height * 0.20);
+        }
+    }
+}
+
+function drawInfo() {
+    let base_image_bottle = new Image();
+    base_image_bottle.src = 'img/bottles/1.Marcador.png';
+    if (base_image_bottle.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
+        ctx.drawImage(base_image_bottle, -15, 5, base_image_bottle.width * 0.25, base_image_bottle.height * 0.25);
+    }
+    ctx.font = '20px Chango';
+    ctx.fillText('x' + collectedBottles, 60, 70);
+}
+
+function drawBottles() {
+    for (let i = 0; i < placedBottles.length; i++) {
+        let bottle_x = placedBottles[i];
+        addBackgroundObject('img/bottles/2.Botella_enterrada2.png', bottle_x, 315, 0.25);
+    }
 }
 
 function drawEnergyBar() {
-    ctx.globalAlpha = 0.7; 
+    ctx.globalAlpha = 0.7;
     ctx.fillStyle = "black"
     ctx.fillRect(440, 30, 230, 60) //x-koordinate, y-koordinate, breite, höhe
 
-    ctx.globalAlpha = 1; 
+    ctx.globalAlpha = 1;
     ctx.fillStyle = "darkred"
     ctx.fillRect(455, 40, 2 * character_energy, 40) //x-koordinate, y-koordinate, breite, höhe
 }
@@ -156,12 +217,13 @@ function updateFloor() {
         bg_elements = bg_elements - GAME_SPEED;
     }
 
-    if (isMovingLeft) {
+    if (isMovingLeft && bg_elements < 500) {
         bg_elements = bg_elements + GAME_SPEED;
     }
     //evtl For-Schleife wie bei Video17
     addBackgroundObject('img/floor/Completo.png', 0, -60, 0.5);
     addBackgroundObject('img/floor/Completo.png', 1500, -60, 0.5);
+    addBackgroundObject('img/floor/Completo.png', 3000, -60, 0.5);
 }
 
 function addBackgroundObject(src, offsetX, offsetY, scale) {
@@ -185,6 +247,7 @@ function listenForKeys() {
     document.addEventListener('keydown', e => {
         const k = e.key;
         console.log(e.code == 'Space');
+        console.log(k);
 
         if (k == 'ArrowRight') {
             isMovingRight = true;
@@ -194,6 +257,14 @@ function listenForKeys() {
             isMovingLeft = true;
             /*  character_x = character_x - 5; //Person wird an der X-Achse um 5 px nach links verschoben wenn man die rechte Pfeiltaste klickt */
         }
+        if (k == 'b' && collectedBottles > 0) {
+            let timepassed = new Date().getTime() - bottleThrowTime;
+            if (timepassed > 1000) {
+                collectedBottles--; //links oben wird eine Flasche abgezogen
+                bottleThrowTime = new Date().getTime(); //hier wird die Zeit ermittelt wo "b" gedrück wird um die Koordinaten zu wissen zum schmeißen
+            }
+        }
+
 
         let timePassedSinceJump = new Date().getTime() - lastJumpStarted;
         if (e.code == 'Space' && timePassedSinceJump > JUMP_TIME * 2) {
@@ -214,9 +285,6 @@ function listenForKeys() {
             isMovingLeft = false;
             /*      character_x = character_x - 5; */
         }
-        /*         if (e.code == 'Space') {
-                    isJumping = false;
-                } */
     });
 
 }
