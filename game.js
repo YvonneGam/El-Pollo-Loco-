@@ -13,21 +13,19 @@ let characterGraphicsRight = ['img/character/character_move1.png', 'img/characte
 let characterGraphicsLeft = ['img/character/character_move1-left.png', 'img/character/character_move2-left.png', 'img/character/character_move3-left.png', 'img/character/character_move4-left.png', 'img/character/character_move5-left.png', 'img/character/character_move6-left.png'];
 let characterGraphicIndex = 0;
 let chickens = [];
-let placedBottles = [1000, 1800, 2300, 2800, 3100];
-let collectedBottles = 30;
+let placedBottles = [1000, 1800, 2300, 2800, 3100, 3500, 4000];
+let collectedBottles = 0;
 let bottleThrowTime = 0;
 let throwBottle_x = 0;
 let throwBottle_y = 0;
 let enemyDefeatedAt = 0;
 let game_finished = false;
-let finalScreenWin = 'img/finalscreen.png';
-let finalScreenLoose = 'img/finalscreenLoose.png';
 let character_lost_at = 0;
 
 //Game config
 let JUMP_TIME = 300; //in Millisekunden
 let GAME_SPEED = 6;
-let BOSS_POSITION = 4500;
+let BOSS_POSITION = 5500;
 let AUDIO_RUNNING = new Audio('audio/running_mp3.mp3');
 let AUDIO_JUMPING = new Audio('audio/jump.mp3');
 let AUDIO_BOTTLE = new Audio('audio/bottle.mp3');
@@ -43,13 +41,13 @@ BACKGROUND_MUSIC.volume = 0.3;
 
 function preloadImages() {
     for (let i = 0; i < imagePaths.length; i++) {
-      let image = new Image();
-      image.src = imagePaths[i];
-      images.push(image); // push image-path to images-array (which contains all image-paths)
+        let image = new Image();
+        image.src = imagePaths[i];
+        images.push(image); // push image-path to images-array (which contains all image-paths)
     }
-  }
-  
-  
+}
+
+
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -131,15 +129,17 @@ function calculateChickenPosition() {
 function createChickenList() {
     chickens = [
         createChicken(1, 650, 350), //type, position_x, position_y
-        createChicken(2, 800, 345),
-        createChicken(1, 1050, 350),
-        createChicken(2, 1600, 345),
-        createChicken(1, 2000, 350),
+        createChicken(2, 900, 345),
+        createChicken(1, 1600, 350),
+        createChicken(1, 2050, 350),
         createChicken(2, 2300, 345),
         createChicken(2, 2700, 345),
         createChicken(1, 3200, 350),
-        createChicken(2, 3800, 350),
-        createChicken(1, 4100, 350)
+        createChicken(1, 3600, 350),
+        createChicken(2, 3800, 345),
+        createChicken(1, 4100, 350),
+        createChicken(2, 4800, 345),
+        createChicken(2, 5000, 345),
     ];
 }
 
@@ -147,7 +147,7 @@ function checkForRunning() {
     setInterval(function () {
         if (isMovingRight) {
             AUDIO_RUNNING.play();
-            let index = characterGraphicIndex % characterGraphicsRight.length;
+            let index = characterGraphicIndex % characterGraphicsRight.length; // steht für den Rest (modulu)
             currentCharacterImage = characterGraphicsRight[index];
             characterGraphicIndex = characterGraphicIndex + 1;
         }
@@ -181,13 +181,13 @@ function draw() {
 }
 
 function drawFinalScreen() {
-    let final_image_win = new Image();
-    final_image_win.src = finalScreenWin;
-    console.log('win');
-    if (character_lost_at > 0) {
-        let final_imag_loose = new Image();
-        final_imag_loose.src = finalScreenLoose;
+    let base_image_bottle = new Image();
+    base_image_bottle.src = 'img/finalscreen-winner.png';
+    if (base_image_bottle.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
+        ctx.drawImage(base_image_bottle, 0, 00, base_image_bottle.width, base_image_bottle.height);
     }
+/*      ctx.font = '100px Chango';
+    ctx.fillText('You won!', 60, 250);  */
 }
 
 function drawEnemy() {
@@ -289,7 +289,7 @@ function updateCaracter() {
         if (character_y < 125) {
             character_y = character_y + 10;
         }
-        if (base_image.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
+        if (base_image.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig geladen ist, ansonten "false"
             ctx.drawImage(base_image, character_x, character_y, base_image.width * 0.25, base_image.height * 0.25);
         }
     }
@@ -311,6 +311,7 @@ function updateFloor() {
     addBackgroundObject('img/floor/Completo.png', 0, -60, 0.5);
     addBackgroundObject('img/floor/Completo.png', 1500, -60, 0.5);
     addBackgroundObject('img/floor/Completo.png', 3000, -60, 0.5);
+    addBackgroundObject('img/floor/Completo.png', 4500, -60, 0.5);
 }
 
 function addBackgroundObject(src, offsetX, offsetY, scale) {
@@ -338,11 +339,9 @@ function listenForKeys() {
 
         if (k == 'ArrowRight') {
             isMovingRight = true;
-            /*   character_x = character_x + 5; //Person wird an der X-Achse um 5 px nach rechts verschoben wenn man die rechte Pfeiltaste klickt */
         }
         if (k == 'ArrowLeft') {
             isMovingLeft = true;
-            /*  character_x = character_x - 5; //Person wird an der X-Achse um 5 px nach links verschoben wenn man die rechte Pfeiltaste klickt */
         }
         if (k == 'b' && collectedBottles > 0) {
             let timepassed = new Date().getTime() - bottleThrowTime;
@@ -366,13 +365,10 @@ function listenForKeys() {
         const k = e.key;
         console.log(k);
         if (k == 'ArrowRight') {
-            isMoving = false;
-            /*    character_x = character_x + 5; */
+            isMovingRight = false;
         }
         if (k == 'ArrowLeft') {
             isMovingLeft = false;
-            /*      character_x = character_x - 5; */
         }
     });
-
 }

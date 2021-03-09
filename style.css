@@ -1,14 +1,80 @@
 body {
-    font-family: 'Chango', cursive;
+    font-family: 'Cubano', cursive;
+    /*oder Chango*/
     background-color: bisque;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 h1 {
-    color:white;
+    color: white;
     -webkit-text-fill-color: transparent;
-    background: -webkit-linear-gradient(transparent, transparent),
-    url(img/pattern167.png) repeat;
+    background: -webkit-linear-gradient(transparent, transparent), url(img/pattern167.png) repeat;
     background: -o-linear-gradient(transparent, transparent);
     -webkit-background-clip: text;
     font-size: 60px;
+    justify-content: center;
+    display: flex;
+    font-weight: 900;
+    font-size: 85px;
+    /* text-shadow: 10px 5px 15px black; */
+}
+
+canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 800px;
+}
+
+.keys-explanation {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 80px;
+    padding-right: 80px;
+    margin-top: 30px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.clickbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.clickbar img {
+    object-fit: cover;
+    width: 80px;
+    margin-bottom: 15px;
+}
+
+.startscreen {
+    position: absolute; 
+    width: 720px;
+    height: 480px; 
+    object-fit: cover; 
+}
+
+.canvas-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 720px;
+    height: 480px; 
+}
+
+.start_btn {
+    position: absolute; 
+    z-index: 5; 
+    top: 400px; 
+}
+
+
+.d-none {
+    display: none; 
 }

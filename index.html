@@ -8,16 +8,48 @@
     <title>El Pollo Loco</title>
     <link rel="stylesheet" href="style.css">
     <script src="game.js"></script>
+    <script src="start.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Chango&display=swap" rel="stylesheet">
+    <link rel="icon" href="img/favicon.png" type="image/png">
+
 </head>
 
 <body onload="init()">
 
-    <h1>El Pollo Loco</h1>
-    <canvas id="canvas" width="720" height="480"></canvas>
 
-   <!--  <a href="https://www.vecteezy.com/free-vector/aztec-pattern">Aztec Pattern Vectors by Vecteezy</a>
+    <h1>El Pollo Loco</h1>
+    <div class="canvas-box">
+        <canvas id="canvas" width="720" height="480"></canvas>
+        <img class="startscreen" id="startscreen" src="img/finalscreen-winner.png">
+        <button id="start_btn" class="start_btn" onclick="startGame()">Play Game</button>
+        
+    </div>
+
+    <div class="keys-explanation">
+        <div class="clickbar">
+            <img src="img/arrow-left.png">
+            <div>Run left:<br> push arrow left</div>
+        </div>
+        <div class="clickbar">
+            <img src="img/arrow-right.png">
+            <div>Run left:<br> push arrow right</div>
+        </div>
+
+        <div class="clickbar">
+            <div> <img src="img/space.png"> </div>
+            <div>Jump: <br>push space-bar</div>
+        </div>
+
+        <div class="clickbar">
+            <img src="img/b-throw.png">
+            <div>Throw bottle: <br>push B</div>
+        </div>
+
+    </div>
+
+
+    <!--  <a href="https://www.vecteezy.com/free-vector/aztec-pattern">Aztec Pattern Vectors by Vecteezy</a>
     <a href="https://www.vecteezy.com/free-vector/geometric">Geometric Vectors by Vecteezy</a> -->
 
 </body>
