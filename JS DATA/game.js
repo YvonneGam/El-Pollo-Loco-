@@ -12,7 +12,16 @@ let currentCharacterImage = 'img/character/character_move1.png';
 let characterGraphicsRight = ['img/character/character_move1.png', 'img/character/character_move2.png', 'img/character/character_move3.png', 'img/character/character_move4.png', 'img/character/character_move5.png', 'img/character/character_move6.png'];
 let characterGraphicsLeft = ['img/character/character_move1-left.png', 'img/character/character_move2-left.png', 'img/character/character_move3-left.png', 'img/character/character_move4-left.png', 'img/character/character_move5-left.png', 'img/character/character_move6-left.png'];
 let characterGraphicIndex = 0;
+
 let chickens = [];
+let currentYellowChicken = 'img/littlechicken/yellowchicken1.png';
+/* let yellowChickenGraphics = ['img/littlechicken/yellowchicken1.png', 'img/littlechicken/yellowchicken2.png'];
+let yellowChickenIndex = 0;  */
+
+let brownchickens = [];
+let currentBrownChicken = 'img/littlechicken/brownchicken1.png';
+/* let brownChickenGraphics = ['img/littlechicken/brownchicken1.png', 'img/littlechicken/brownchicken2.png']; */
+
 let placedBottles = [1000, 1800, 2300, 2800, 3100, 3500, 4000];
 let collectedBottles = 0;
 let bottleThrowTime = 0;
@@ -52,11 +61,17 @@ function preloadImages() {
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+    checkYellowChicken();
     createChickenList();
+
+    checkBrownChicken();
+    createBrownChickenList();
+
     checkForRunning();
     draw()
     listenForKeys();
     calculateChickenPosition();
+    calculateBrownChickenPosition()
     checkForCollision();
 }
 
@@ -65,7 +80,7 @@ function init() {
  */
 function checkForCollision() {
     setInterval(function () {
-        // Check chicken
+        // Check collision with yellow chicken
         for (let i = 0; i < chickens.length; i++) {
             let chicken = chickens[i];
             let chicken_x = chicken.position_x + bg_elements; //Position des Hühnchens + Position des Hintergrundes, da nur er sich verschiebt und nicht der Character
@@ -80,7 +95,22 @@ function checkForCollision() {
             }
         }
 
-        //check bottles
+        //Check collision with brown chicken
+        for (let i = 0; i < brownchickens.length; i++) {
+            let brownchicken = brownchickens[i];
+            let brownchicken_x = brownchicken.position_x + bg_elements; //Position des Hühnchens + Position des Hintergrundes, da nur er sich verschiebt und nicht der Character
+            if ((brownchicken_x - 40) < character_x && (brownchicken_x + 40) > character_x) { //Ist die Koordinate der Chicken-10 kleiner als die x-Koordiante der Person & ist die Koordinate der Chicken+10 größer als die Person, also 20 Unterschied, dann Kollision!
+                if (character_y > 95) //Wenn die y-Koordinate des Characters größer als 95 ist dann wird keine Energie abgezogen, da man dann hoch genug gesprungen ist
+                    if (character_energy > 0) {
+                        character_energy = character_energy - 10;  //1 Energie-Element wird abgezogen bei Collision
+                    } else {
+                        character_lost_at = new Date().getTime();
+                        game_finished = true;
+                    }
+            }
+        }
+
+        //check collision with bottles
         for (let i = 0; i < placedBottles.length; i++) {
             let bottle_x = placedBottles[i] + bg_elements;
             if ((bottle_x - 40) < character_x && (bottle_x + 40) > character_x) { //Ist die Koordinate der Chicken-10 kleiner als die x-Koordiante der Person & ist die Koordinate der Chicken+10 größer als die Person, also 20 Unterschied, dann Kollision!
@@ -91,7 +121,7 @@ function checkForCollision() {
             }
         }
 
-        //check enemy
+        //check collision with enemy
         if (throwBottle_x > BOSS_POSITION + bg_elements - 100 && throwBottle_x < BOSS_POSITION + bg_elements + 100) {
             console.log('bäm!! Energie :' + enemy_energy);
             if (enemy_energy > 0) { //Hier wird gecheckt ob die Enerie mehr als 0 ist (also Chicken gewinnt)
@@ -114,13 +144,31 @@ function finishLevel() {
 }
 
 
+//Yellow chicken
+
+/**
+ * This function calculates the position of the yellow chickens
+ */
 function calculateChickenPosition() {
     setInterval(function () {
         for (let i = 0; i < chickens.length; i++) {
             let chicken = chickens[i];
             chicken.position_x = chicken.position_x - chicken.speed;
         }
-    }, 50);
+    }, 80);
+}
+
+/**
+ * check for the current image of the chicken.(Moving)
+ */
+function checkYellowChicken() {
+    setInterval(function () {
+        if (currentYellowChicken == 'img/littlechicken/yellowchicken1.png') {
+            currentYellowChicken = 'img/littlechicken/yellowchicken2.png';
+        } else {
+            currentYellowChicken = 'img/littlechicken/yellowchicken1.png';
+        }
+    }, 100);
 }
 
 /**
@@ -128,21 +176,98 @@ function calculateChickenPosition() {
  */
 function createChickenList() {
     chickens = [
-        createChicken(1, 650, 350), //type, position_x, position_y
-        createChicken(2, 900, 345),
-        createChicken(1, 1600, 350),
-        createChicken(1, 2050, 350),
-        createChicken(2, 2300, 345),
-        createChicken(2, 2700, 345),
-        createChicken(1, 3200, 350),
-        createChicken(1, 3600, 350),
-        createChicken(2, 3800, 345),
-        createChicken(1, 4100, 350),
-        createChicken(2, 4800, 345),
-        createChicken(2, 5000, 345),
+        createYellowChicken(1, 650, 350), //type, position_x, position_y
+        createYellowChicken(2, 900, 350),
+        createYellowChicken(1, 2050, 350),
+        createYellowChicken(1, 3200, 350),
+        createYellowChicken(2, 3800, 350),
+        createYellowChicken(2, 5000, 350),
     ];
 }
 
+/**
+ * position of all small chickens
+ */
+function drawChicken() {
+    for (i = 0; i < chickens.length; i = i + 1) {
+        let chicken = chickens[i];
+        addBackgroundObject(chicken.img, chicken.position_x, chicken.position_y, chicken.scale);
+    }
+}
+
+function createYellowChicken(type, position_x, position_y) {
+    return { //JSON for all chicken
+        "img": "img/littlechicken/yellowchicken" + type + ".png",
+        "position_x": position_x,
+        "position_y": position_y,
+        "scale": 0.25,
+        "speed": (Math.random() * 5)
+    };
+}
+
+//Brown chickens
+/**
+ * This function calculates the position of the yellow chickens
+ */
+function calculateBrownChickenPosition() {
+    setInterval(function () {
+        for (let i = 0; i < brownchickens.length; i++) {
+            let brownchicken = brownchickens[i];
+            brownchicken.position_x = brownchicken.position_x - brownchicken.speed;
+        }
+    }, 50);
+}
+
+/**
+ * check for the current image of the chicken.(Moving)
+ */
+function checkBrownChicken() {
+    setInterval(function () {
+        if (currentBrownChicken == 'img/littlechicken/yellowchicken1.png') {
+            currentBrownChicken = 'img/littlechicken/yellowchicken2.png';
+        } else {
+            currentBrownChicken = 'img/littlechicken/yellowchicken1.png';
+        }
+    }, 100);
+}
+
+/**
+ * The little chickens are created here and each chicken has his coordinates
+ */
+function createBrownChickenList() {
+    brownchickens = [ //Hier wird das JSON brownchicken befüllt
+        createBrownChicken(1, 1600, 350), 
+        createBrownChicken(2, 2500, 350),
+        createBrownChicken(1, 3600, 350), 
+        createBrownChicken(1, 4100, 350),
+        createYellowChicken(2, 4800, 350)
+    ];
+}
+
+/**
+ * position of all small brown chickens
+ */
+function drawBrownChicken() {
+    for (i = 0; i < brownchickens.length; i = i + 1) {
+        let chicken = brownchickens[i];
+        addBackgroundObject(chicken.img, chicken.position_x, chicken.position_y, chicken.scale);
+    }
+}
+
+function createBrownChicken(type, position_x, position_y) {
+    return { //JSON for all chicken
+        "img": "img/littlechicken/brownchicken" + type + ".png",
+        "position_x": position_x,
+        "position_y": position_y,
+        "scale": 0.25,
+        "speed": (Math.random() * 5)
+    };
+}
+
+
+/**
+ * This function checks if the character is runnig riht or left and changes the feet for running
+ */
 function checkForRunning() {
     setInterval(function () {
         if (isMovingRight) {
@@ -171,6 +296,7 @@ function draw() {
     } else {
         drawBottles();
         drawChicken();
+        drawBrownChicken();
         updateCaracter();
         requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
         drawEnergyBar();
@@ -186,8 +312,8 @@ function drawFinalScreen() {
     if (base_image_bottle.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
         ctx.drawImage(base_image_bottle, 0, 00, base_image_bottle.width, base_image_bottle.height);
     }
-/*      ctx.font = '100px Chango';
-    ctx.fillText('You won!', 60, 250);  */
+    /*      ctx.font = '100px Chango';
+        ctx.fillText('You won!', 60, 250);  */
 }
 
 function drawEnemy() {
@@ -254,25 +380,6 @@ function drawEnergyBar() {
     ctx.fillRect(455, 40, 2 * character_energy, 40) //x-koordinate, y-koordinate, breite, höhe
 }
 
-/**
- * position of all small chickens
- */
-function drawChicken() {
-    for (i = 0; i < chickens.length; i = i + 1) {
-        let chicken = chickens[i];
-        addBackgroundObject(chicken.img, chicken.position_x, chicken.position_y, chicken.scale);
-    }
-}
-
-function createChicken(type, position_x, position_y) {
-    return { //JSON for all chicken
-        "img": "img/littlechicken/littlechicken" + type + ".png",
-        "position_x": position_x,
-        "position_y": position_y,
-        "scale": 0.25,
-        "speed": (Math.random() * 5)
-    };
-}
 
 /**
  * This function adds the character
