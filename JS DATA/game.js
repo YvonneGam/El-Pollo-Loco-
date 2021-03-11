@@ -6,6 +6,7 @@ let character_energy = 100;
 let enemy_energy = 10;
 let isMovingRight = false;
 let isMovingLeft = false;
+let isJumping = false; 
 let bg_elements = 0;
 let lastJumpStarted = 0;
 let currentCharacterImage = 'img/character/character_move1.png';
@@ -13,10 +14,14 @@ let characterGraphicsRight = ['img/character/character_move1.png', 'img/characte
 let characterGraphicsLeft = ['img/character/character_move1-left.png', 'img/character/character_move2-left.png', 'img/character/character_move3-left.png', 'img/character/character_move4-left.png', 'img/character/character_move5-left.png', 'img/character/character_move6-left.png'];
 let characterGraphicIndex = 0;
 
+let currentJumpImage = 'img/character/J-33.png';
+let characterGraphicsJump = ['img/character/J-33.png', 'img/character/J-34.png', 'img/character/J-35.png', 'img/character/J-36.png', 'img/character/J-37.png', 'img/character/J-38.png'];
+let characterGraphicJumpIndex = 0;
+
 let chickens = [];
 let currentYellowChicken = 'img/littlechicken/yellowchicken1.png';
 /* let yellowChickenGraphics = ['img/littlechicken/yellowchicken1.png', 'img/littlechicken/yellowchicken2.png'];
-let yellowChickenIndex = 0;  */
+let yellowChickenIndex = 0; */
 
 let brownchickens = [];
 let currentBrownChicken = 'img/littlechicken/brownchicken1.png';
@@ -61,13 +66,14 @@ function preloadImages() {
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
-    checkYellowChicken();
+    checkRunningYellowChicken();
     createChickenList();
 
-    checkBrownChicken();
+    checkRunningBrownChicken();
     createBrownChickenList();
 
     checkForRunning();
+    checkForJumping();
     draw()
     listenForKeys();
     calculateChickenPosition();
@@ -123,7 +129,6 @@ function checkForCollision() {
 
         //check collision with enemy
         if (throwBottle_x > BOSS_POSITION + bg_elements - 100 && throwBottle_x < BOSS_POSITION + bg_elements + 100) {
-            console.log('bäm!! Energie :' + enemy_energy);
             if (enemy_energy > 0) { //Hier wird gecheckt ob die Enerie mehr als 0 ist (also Chicken gewinnt)
                 enemy_energy = enemy_energy - 10;
                 AUDIO_GLASS.play();
@@ -161,7 +166,7 @@ function calculateChickenPosition() {
 /**
  * check for the current image of the chicken.(Moving)
  */
-function checkYellowChicken() {
+function checkRunningYellowChicken() {
     setInterval(function () {
         if (currentYellowChicken == 'img/littlechicken/yellowchicken1.png') {
             currentYellowChicken = 'img/littlechicken/yellowchicken2.png';
@@ -221,7 +226,7 @@ function calculateBrownChickenPosition() {
 /**
  * check for the current image of the chicken.(Moving)
  */
-function checkBrownChicken() {
+function checkRunningBrownChicken() {
     setInterval(function () {
         if (currentBrownChicken == 'img/littlechicken/yellowchicken1.png') {
             currentBrownChicken = 'img/littlechicken/yellowchicken2.png';
@@ -236,11 +241,11 @@ function checkBrownChicken() {
  */
 function createBrownChickenList() {
     brownchickens = [ //Hier wird das JSON brownchicken befüllt
-        createBrownChicken(1, 1600, 350), 
+        createBrownChicken(1, 1600, 350),
         createBrownChicken(2, 2500, 350),
-        createBrownChicken(1, 3600, 350), 
+        createBrownChicken(1, 3600, 350),
         createBrownChicken(1, 4100, 350),
-        createYellowChicken(2, 4800, 350)
+        createBrownChicken(2, 4800, 350)
     ];
 }
 
@@ -289,6 +294,17 @@ function checkForRunning() {
     }, 100);
 }
 
+function checkForJumping() {
+    setInterval(function () {
+        if (isJumping) {
+            let index = characterGraphicJumpIndex % characterGraphicsJump.length; 
+            currentJumpImage = characterGraphicsJump[index];
+            characterGraphicJumpIndex = characterGraphicJumpIndex + 1;
+        }
+    }, 80);
+}
+
+
 function draw() {
     updateFloor();
     if (game_finished) {
@@ -307,10 +323,10 @@ function draw() {
 }
 
 function drawFinalScreen() {
-    let base_image_bottle = new Image();
-    base_image_bottle.src = 'img/finalscreen-winner.png';
-    if (base_image_bottle.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
-        ctx.drawImage(base_image_bottle, 0, 00, base_image_bottle.width, base_image_bottle.height);
+    let base_image_screen = new Image();
+    base_image_screen.src = 'img/finalscreens-elpolloloco-winner.png';
+    if (base_image_screen.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
+        ctx.drawImage(base_image_screen, 100, -100, base_image_screen.width, base_image_screen.height);
     }
     /*      ctx.font = '100px Chango';
         ctx.fillText('You won!', 60, 250);  */
@@ -462,6 +478,7 @@ function listenForKeys() {
 
         let timePassedSinceJump = new Date().getTime() - lastJumpStarted;
         if (e.code == 'Space' && timePassedSinceJump > JUMP_TIME * 2) {
+            isJumping = true; 
             AUDIO_JUMPING.play();
             lastJumpStarted = new Date().getTime();
         }

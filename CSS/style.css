@@ -9,16 +9,16 @@ body {
 }
 
 h1 {
-    color: white;
-    -webkit-text-fill-color: transparent;
+    color: black;
+/*     -webkit-text-fill-color: transparent;
     background: -webkit-linear-gradient(transparent, transparent), url(nativeamerican-01_.png) repeat;
     background: -o-linear-gradient(transparent, transparent);
-    -webkit-background-clip: text;
+    -webkit-background-clip: text; */
     font-size: 60px;
     justify-content: center;
     display: flex;
     font-weight: 900;
-    font-size: 85px;
+    font-size: 40px;
     /* text-shadow: 10px 5px 15px black; */
     bottom: -10px; 
 }
