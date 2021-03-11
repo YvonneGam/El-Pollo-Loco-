@@ -174,7 +174,7 @@ function checkRunningYellowChicken() {
         } else {
             currentYellowChicken = 'img/littlechicken/yellowchicken1.png';
         }
-    }, 100);
+    }, 150);
 }
 
 /**
@@ -196,7 +196,8 @@ function createChickenList() {
  */
 function drawChicken() {
     for (i = 0; i < chickens.length; i = i + 1) {
-        let chicken = chickens[i];
+        let chicken = chickens[i];  
+        chicken.img = currentYellowChicken;
         addBackgroundObject(chicken.img, chicken.position_x, chicken.position_y, chicken.scale);
     }
 }
@@ -255,6 +256,7 @@ function createBrownChickenList() {
  */
 function drawBrownChicken() {
     for (i = 0; i < brownchickens.length; i = i + 1) {
+        
         let chicken = brownchickens[i];
         addBackgroundObject(chicken.img, chicken.position_x, chicken.position_y, chicken.scale);
     }

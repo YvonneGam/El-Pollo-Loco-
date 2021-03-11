@@ -1,7 +1,7 @@
 body {
     font-family: 'Cubano', cursive;
     /*oder Chango*/
-    background-color: bisque;
+    background-color: #F5EBDD; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -35,11 +35,10 @@ canvas {
 .keys-explanation {
     display: flex;
     justify-content: space-between;
-    padding-left: 80px;
-    padding-right: 80px;
-    margin-top: 30px;
     font-size: 14px;
     text-align: center;
+    width: 720px;
+    margin-top: 40px;
 }
 
 .clickbar {
@@ -51,7 +50,7 @@ canvas {
 .clickbar img {
     object-fit: cover;
     width: 80px;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 }
 
 .startscreen {
