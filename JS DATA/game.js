@@ -6,7 +6,7 @@ let character_energy = 100;
 let enemy_energy = 10;
 let isMovingRight = false;
 let isMovingLeft = false;
-let isJumping = false; 
+let isJumping = false;
 let bg_elements = 0;
 let lastJumpStarted = 0;
 let currentCharacterImage = 'img/character/character_move1.png';
@@ -143,6 +143,7 @@ function checkForCollision() {
 function finishLevel() {
     AUDIO_CHICKEN.play();
     setTimeout(function () {
+        BACKGROUND_MUSIC.pause(); 
         AUDIO_WIN.play();
     }, 1000);
     game_finished = true;
@@ -297,7 +298,7 @@ function checkForRunning() {
 function checkForJumping() {
     setInterval(function () {
         if (isJumping) {
-            let index = characterGraphicJumpIndex % characterGraphicsJump.length; 
+            let index = characterGraphicJumpIndex % characterGraphicsJump.length;
             currentJumpImage = characterGraphicsJump[index];
             characterGraphicJumpIndex = characterGraphicJumpIndex + 1;
         }
@@ -326,10 +327,10 @@ function drawFinalScreen() {
     let base_image_screen = new Image();
     base_image_screen.src = 'img/finalscreens-elpolloloco-winner.png';
     if (base_image_screen.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
-        ctx.drawImage(base_image_screen, 100, -100, base_image_screen.width, base_image_screen.height);
+        ctx.drawImage(base_image_screen, 0, 0, base_image_screen.width * 1, base_image_screen.height * 1);
     }
-    /*      ctx.font = '100px Chango';
-        ctx.fillText('You won!', 60, 250);  */
+/*     ctx.font = '100px Chango';
+    ctx.fillText('You won!', 60, 250); */
 }
 
 function drawEnemy() {
@@ -478,7 +479,7 @@ function listenForKeys() {
 
         let timePassedSinceJump = new Date().getTime() - lastJumpStarted;
         if (e.code == 'Space' && timePassedSinceJump > JUMP_TIME * 2) {
-            isJumping = true; 
+            isJumping = true;
             AUDIO_JUMPING.play();
             lastJumpStarted = new Date().getTime();
         }

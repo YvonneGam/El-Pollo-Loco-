@@ -10,7 +10,7 @@ body {
 
 h1 {
     color: black;
-/*     -webkit-text-fill-color: transparent;
+    /*     -webkit-text-fill-color: transparent;
     background: -webkit-linear-gradient(transparent, transparent), url(nativeamerican-01_.png) repeat;
     background: -o-linear-gradient(transparent, transparent);
     -webkit-background-clip: text; */
@@ -20,7 +20,7 @@ h1 {
     font-weight: 900;
     font-size: 40px;
     /* text-shadow: 10px 5px 15px black; */
-    bottom: -10px; 
+    bottom: -10px;
 }
 
 canvas {
@@ -55,10 +55,10 @@ canvas {
 }
 
 .startscreen {
-    position: absolute; 
+    position: absolute;
     width: 720px;
-    height: 480px; 
-    object-fit: cover; 
+    height: 480px;
+    object-fit: cover;
 }
 
 .canvas-box {
@@ -67,16 +67,23 @@ canvas {
     align-items: center;
     justify-content: center;
     width: 720px;
-    height: 480px; 
+    height: 480px;                                           
 }
 
 .start_btn {
-    position: absolute; 
-    z-index: 5; 
-    top: 400px; 
+    position: absolute;
+    z-index: 5;
+    top: 380px;
+    background-color: #6BA396;
+    color: black;
+    border: none; 
+    font-family: 'Cubano', cursive;
+    font-size: 22px;
+    padding: 12px;
+    box-shadow: 5px 5px 5px darkslategrey;
+    cursor: pointer;
 }
 
-
 .d-none {
-    display: none; 
+    display: none;
 }
