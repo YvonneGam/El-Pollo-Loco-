@@ -20,12 +20,9 @@ let characterGraphicJumpIndex = 0;
 
 let chickens = [];
 let currentYellowChicken = 'img/littlechicken/yellowchicken1.png';
-/* let yellowChickenGraphics = ['img/littlechicken/yellowchicken1.png', 'img/littlechicken/yellowchicken2.png'];
-let yellowChickenIndex = 0; */
 
 let brownchickens = [];
 let currentBrownChicken = 'img/littlechicken/brownchicken1.png';
-/* let brownChickenGraphics = ['img/littlechicken/brownchicken1.png', 'img/littlechicken/brownchicken2.png']; */
 
 let placedBottles = [1000, 1800, 2300, 2800, 3100, 3500, 4000];
 let collectedBottles = 0;
@@ -33,7 +30,8 @@ let bottleThrowTime = 0;
 let throwBottle_x = 0;
 let throwBottle_y = 0;
 let enemyDefeatedAt = 0;
-let game_finished = false;
+let game_finished_winner = false;
+let game_finished_looser = false;
 let character_lost_at = 0;
 
 //Game config
@@ -96,7 +94,7 @@ function checkForCollision() {
                         character_energy = character_energy - 10;  //1 Energie-Element wird abgezogen bei Collision
                     } else {
                         character_lost_at = new Date().getTime();
-                        game_finished = true;
+                        game_finished_winner = true;
                     }
             }
         }
@@ -109,9 +107,11 @@ function checkForCollision() {
                 if (character_y > 95) //Wenn die y-Koordinate des Characters größer als 95 ist dann wird keine Energie abgezogen, da man dann hoch genug gesprungen ist
                     if (character_energy > 0) {
                         character_energy = character_energy - 10;  //1 Energie-Element wird abgezogen bei Collision
+                        game_finished_looser = true; //test
+                        looseLevel();
                     } else {
                         character_lost_at = new Date().getTime();
-                        game_finished = true;
+                        game_finished_winner = true;
                     }
             }
         }
@@ -143,134 +143,25 @@ function checkForCollision() {
 function finishLevel() {
     AUDIO_CHICKEN.play();
     setTimeout(function () {
-        BACKGROUND_MUSIC.pause(); 
+        BACKGROUND_MUSIC.pause();
         AUDIO_WIN.play();
     }, 1000);
-    game_finished = true;
+    game_finished_winner = true;
+    document.getElementById('restart_btn').classList.remove('d-none');
 }
 
 
-//Yellow chicken
+//Muss noch irgendwo aufgerufen werden!!!!!!
 
-/**
- * This function calculates the position of the yellow chickens
+/* function looseLevel() { 
+    if(character_energy < 0) {
+    BACKGROUND_MUSIC.pause();
+    AUDIO_LOOSE.play();
+    game_finished_looser = true;
+    document.getElementById('restart_btn').classList.remove('d-none');
+}
+}
  */
-function calculateChickenPosition() {
-    setInterval(function () {
-        for (let i = 0; i < chickens.length; i++) {
-            let chicken = chickens[i];
-            chicken.position_x = chicken.position_x - chicken.speed;
-        }
-    }, 80);
-}
-
-/**
- * check for the current image of the chicken.(Moving)
- */
-function checkRunningYellowChicken() {
-    setInterval(function () {
-        if (currentYellowChicken == 'img/littlechicken/yellowchicken1.png') {
-            currentYellowChicken = 'img/littlechicken/yellowchicken2.png';
-        } else {
-            currentYellowChicken = 'img/littlechicken/yellowchicken1.png';
-        }
-    }, 150);
-}
-
-/**
- * The little chickens are created here and each chicken has his coordinates
- */
-function createChickenList() {
-    chickens = [
-        createYellowChicken(1, 650, 350), //type, position_x, position_y
-        createYellowChicken(2, 900, 350),
-        createYellowChicken(1, 2050, 350),
-        createYellowChicken(1, 3200, 350),
-        createYellowChicken(2, 3800, 350),
-        createYellowChicken(2, 5000, 350),
-    ];
-}
-
-/**
- * position of all small chickens
- */
-function drawChicken() {
-    for (i = 0; i < chickens.length; i = i + 1) {
-        let chicken = chickens[i];  
-        chicken.img = currentYellowChicken;
-        addBackgroundObject(chicken.img, chicken.position_x, chicken.position_y, chicken.scale);
-    }
-}
-
-function createYellowChicken(type, position_x, position_y) {
-    return { //JSON for all chicken
-        "img": "img/littlechicken/yellowchicken" + type + ".png",
-        "position_x": position_x,
-        "position_y": position_y,
-        "scale": 0.25,
-        "speed": (Math.random() * 5)
-    };
-}
-
-//Brown chickens
-/**
- * This function calculates the position of the yellow chickens
- */
-function calculateBrownChickenPosition() {
-    setInterval(function () {
-        for (let i = 0; i < brownchickens.length; i++) {
-            let brownchicken = brownchickens[i];
-            brownchicken.position_x = brownchicken.position_x - brownchicken.speed;
-        }
-    }, 50);
-}
-
-/**
- * check for the current image of the chicken.(Moving)
- */
-function checkRunningBrownChicken() {
-    setInterval(function () {
-        if (currentBrownChicken == 'img/littlechicken/yellowchicken1.png') {
-            currentBrownChicken = 'img/littlechicken/yellowchicken2.png';
-        } else {
-            currentBrownChicken = 'img/littlechicken/yellowchicken1.png';
-        }
-    }, 100);
-}
-
-/**
- * The little chickens are created here and each chicken has his coordinates
- */
-function createBrownChickenList() {
-    brownchickens = [ //Hier wird das JSON brownchicken befüllt
-        createBrownChicken(1, 1600, 350),
-        createBrownChicken(2, 2500, 350),
-        createBrownChicken(1, 3600, 350),
-        createBrownChicken(1, 4100, 350),
-        createBrownChicken(2, 4800, 350)
-    ];
-}
-
-/**
- * position of all small brown chickens
- */
-function drawBrownChicken() {
-    for (i = 0; i < brownchickens.length; i = i + 1) {
-        
-        let chicken = brownchickens[i];
-        addBackgroundObject(chicken.img, chicken.position_x, chicken.position_y, chicken.scale);
-    }
-}
-
-function createBrownChicken(type, position_x, position_y) {
-    return { //JSON for all chicken
-        "img": "img/littlechicken/brownchicken" + type + ".png",
-        "position_x": position_x,
-        "position_y": position_y,
-        "scale": 0.25,
-        "speed": (Math.random() * 5)
-    };
-}
 
 
 /**
@@ -310,7 +201,7 @@ function checkForJumping() {
 
 function draw() {
     updateFloor();
-    if (game_finished) {
+    if (game_finished_winner) {
         drawFinalScreen();
     } else {
         drawBottles();
@@ -331,8 +222,8 @@ function drawFinalScreen() {
     if (base_image_screen.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
         ctx.drawImage(base_image_screen, 0, 0, base_image_screen.width * 1, base_image_screen.height * 1);
     }
-/*     ctx.font = '100px Chango';
-    ctx.fillText('You won!', 60, 250); */
+    /*     ctx.font = '100px Chango';
+        ctx.fillText('You won!', 60, 250); */
 }
 
 function drawEnemy() {

@@ -72,7 +72,7 @@ canvas {
 .start_btn {
     position: absolute;
     z-index: 5;
-    top: 380px;
+    top: 370px;
     background-color: #6BA396;
     color: black;
     border: none; 
@@ -85,4 +85,17 @@ canvas {
 
 .d-none {
     display: none;
+}
+
+.game_instruction_btn {
+    position: absolute;
+    z-index: 5;
+    top: 435px;
+    background-color: #6BA396;
+    font-size: 10px; 
+    padding: 5px; 
+    color: black;  
+    border: none; 
+    font-family: 'Cubano', cursive;
+    cursor: pointer;
 }

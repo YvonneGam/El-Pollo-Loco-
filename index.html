@@ -8,6 +8,7 @@
     <title>El Pollo Loco</title>
     <link rel="stylesheet" href="CSS/style.css">
     <script src="JS Data/game.js"></script>
+    <script src="JS Data/littlechicken.js"></script>
     <script src="JS Data/start.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Chango&display=swap" rel="stylesheet">
@@ -23,7 +24,8 @@
         <canvas id="canvas" width="720" height="480"></canvas>
         <img class="startscreen" id="startscreen" src="img/startscreen.png">
         <button id="start_btn" class="start_btn" onclick="startGame()">Play Game</button>
-        <button id="restart_btn" class="start_btn d-none" onclick="startGame()">Play again</button>
+        <button id="restart_btn" class="start_btn d-none" onclick="restartGame()">Play again</button>
+        <button id="instruction_btn" class="game_instruction_btn" onclick="gameInsturction()">Game Instruction</button>
     </div>
 
     <div class="keys-explanation">
