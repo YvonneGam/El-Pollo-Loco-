@@ -45,6 +45,7 @@ let AUDIO_THROW = new Audio('audio/throw.mp3');
 let AUDIO_CHICKEN = new Audio('audio/chicken.mp3');
 let AUDIO_GLASS = new Audio('audio/breaking_bottle.mp3');
 let AUDIO_WIN = new Audio('audio/win.mp3');
+let AUDIO_LOOSE = new Audio('audio/Looser.mp3');
 AUDIO_WIN.volume = 0.6;
 let BACKGROUND_MUSIC = new Audio('audio/background-sound.mp3');
 BACKGROUND_MUSIC.loop = true;
@@ -94,7 +95,9 @@ function checkForCollision() {
                         character_energy = character_energy - 10;  //1 Energie-Element wird abgezogen bei Collision
                     } else {
                         character_lost_at = new Date().getTime();
-                        game_finished_winner = true;
+                        game_finished_looser = true;
+                        looseLevel(); 
+
                     }
             }
         }
@@ -107,11 +110,10 @@ function checkForCollision() {
                 if (character_y > 95) //Wenn die y-Koordinate des Characters größer als 95 ist dann wird keine Energie abgezogen, da man dann hoch genug gesprungen ist
                     if (character_energy > 0) {
                         character_energy = character_energy - 10;  //1 Energie-Element wird abgezogen bei Collision
-                        game_finished_looser = true; //test
-                        looseLevel();
                     } else {
                         character_lost_at = new Date().getTime();
-                        game_finished_winner = true;
+                        game_finished_looser = true;
+                        looseLevel(); 
                     }
             }
         }
@@ -153,15 +155,14 @@ function finishLevel() {
 
 //Muss noch irgendwo aufgerufen werden!!!!!!
 
-/* function looseLevel() { 
-    if(character_energy < 0) {
+ function looseLevel() { 
     BACKGROUND_MUSIC.pause();
     AUDIO_LOOSE.play();
     game_finished_looser = true;
+    console.log('Verloren'); 
     document.getElementById('restart_btn').classList.remove('d-none');
 }
-}
- */
+ 
 
 
 /**
@@ -201,6 +202,9 @@ function checkForJumping() {
 
 function draw() {
     updateFloor();
+    if(game_finished_looser) {
+        drawLooserScreen(); 
+    }
     if (game_finished_winner) {
         drawFinalScreen();
     } else {
@@ -217,13 +221,19 @@ function draw() {
 }
 
 function drawFinalScreen() {
+    let base_image_screen2 = new Image();
+    base_image_screen2.src = 'img/finalscreens-elpolloloco-winner.png';
+    if (base_image_screen2.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
+        ctx.drawImage(base_image_screen2, 0, 0, base_image_screen2.width * 1, base_image_screen2.height * 1);
+    }
+}
+
+function drawLooserScreen() {
     let base_image_screen = new Image();
-    base_image_screen.src = 'img/finalscreens-elpolloloco-winner.png';
+    base_image_screen.src = 'img/finalscreens-elpolloloco_looser.png';
     if (base_image_screen.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
         ctx.drawImage(base_image_screen, 0, 0, base_image_screen.width * 1, base_image_screen.height * 1);
     }
-    /*     ctx.font = '100px Chango';
-        ctx.fillText('You won!', 60, 250); */
 }
 
 function drawEnemy() {
@@ -351,9 +361,9 @@ function listenForKeys() {
     // Hier wird gecheckt ob eine Taste gedrückt wird
     document.addEventListener('keydown', e => {
         const k = e.key;
-        console.log(e.code == 'Space');
+/*         console.log(e.code == 'Space');
         console.log(k);
-
+ */
         if (k == 'ArrowRight') {
             isMovingRight = true;
         }
@@ -381,7 +391,7 @@ function listenForKeys() {
     // Hier wird gecheckt ob eine Taste losgelassen wird
     document.addEventListener('keyup', e => {
         const k = e.key;
-        console.log(k);
+   /*      console.log(k); */
         if (k == 'ArrowRight') {
             isMovingRight = false;
         }
