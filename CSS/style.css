@@ -1,7 +1,7 @@
 body {
     font-family: 'Cubano', cursive;
     /*oder Chango*/
-    background-color: #F5EBDD; 
+    background-color: #F5EBDD;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -66,7 +66,7 @@ canvas {
     align-items: center;
     justify-content: center;
     width: 720px;
-    height: 480px;                                           
+    height: 480px;
 }
 
 .start_btn {
@@ -75,7 +75,7 @@ canvas {
     top: 370px;
     background-color: #6BA396;
     color: black;
-    border: none; 
+    border: none;
     font-family: 'Cubano', cursive;
     font-size: 22px;
     padding: 12px;
@@ -92,10 +92,44 @@ canvas {
     z-index: 5;
     top: 435px;
     background-color: #6BA396;
-    font-size: 10px; 
-    padding: 5px; 
-    color: black;  
-    border: none; 
+    font-size: 10px;
+    padding: 5px;
+    color: black;
+    border: none;
     font-family: 'Cubano', cursive;
     cursor: pointer;
+}
+
+.instruction-container {
+    position: absolute;
+    background-color: #6BA396;
+    width: 680px;
+    height: 440px;
+    z-index: 5;
+    top: 128px;
+    display: flex;
+    align-items: center; 
+    box-shadow: 5px 5px 5px darkslategrey;
+    display: none; 
+}
+
+.instruction {
+    padding: 30px;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.instruction-btn {
+    width: 160px; 
+    margin-top: 60px; 
+    background-color: #E0A602; 
+    font-size: 22px;
+    padding: 5px;
+    color: black;
+    border: none;
+    font-family: 'Cubano', cursive;
+    cursor: pointer;
+    box-shadow: 5px 5px 5px darkslategrey;
 }

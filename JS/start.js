@@ -9,3 +9,12 @@ function startGame() {
 function restartGame() {
     location.reload();
 }
+
+
+function openInstruction() {
+    document.getElementById('instruction_div').classList.remove('d-none');
+}
+
+function closeInstruction() {
+    document.getElementById('instruction_div').classList.add('d-none');
+}

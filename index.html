@@ -7,9 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Pollo Loco</title>
     <link rel="stylesheet" href="CSS/style.css">
-    <script src="JS Data/game.js"></script>
-    <script src="JS Data/littlechicken.js"></script>
-    <script src="JS Data/start.js"></script>
+    <script src="JS/game.js"></script>
+    <script src="JS/littlechicken.js"></script>
+    <script src="JS/start.js"></script>
+    <script src="JS/all_variables.js"></script>
+    <script src="JS/collision.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Chango&display=swap" rel="stylesheet">
     <link rel="icon" href="img/favicon.png" type="image/png">
@@ -25,7 +27,7 @@
         <img class="startscreen" id="startscreen" src="img/startscreen.png">
         <button id="start_btn" class="start_btn" onclick="startGame()">Play Game</button>
         <button id="restart_btn" class="start_btn d-none" onclick="restartGame()">Play again</button>
-        <button id="instruction_btn" class="game_instruction_btn" onclick="gameInsturction()">Game Instruction</button>
+        <button id="instruction_btn" class="game_instruction_btn" onclick="openInstruction()">Game Instruction</button>
     </div>
 
     <div class="keys-explanation">
@@ -48,6 +50,20 @@
             <div>Throw bottle: <br>push B</div>
         </div>
 
+    </div>
+
+    <div id="instruction_div" class="instruction-container">
+        <div class="instruction">
+            <h2>Game Instruction</h2>
+            <span>
+                Collect minimum 5 bottles to scare ayway the enemy.
+                Throw these bottles against the enemy on the end of the game.
+                But take care of the chickens! Evade the chickens or you loose energy when you collide with them.
+            </span>
+
+            <button id="instruction-btn" class="instruction-btn" onclick="closeInstruction()">All right</button>
+
+        </div>
     </div>
 
 
