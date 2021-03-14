@@ -29,15 +29,13 @@ function init() {
     checkForCollision();
 }
 
-
-
-
 function finishLevel() {
     AUDIO_CHICKEN.play();
     setTimeout(function () {
         BACKGROUND_MUSIC.pause();
         AUDIO_WIN.play();
     }, 1000);
+    /* if(enemy_energy < 0){ */
     game_finished_winner = true;
     document.getElementById('restart_btn').classList.remove('d-none');
 }
@@ -104,17 +102,15 @@ function checkForJumping() {
 
 function draw() {
     updateFloor();
-    if (game_finished_looser) {
-        drawLooserScreen();
-    }
-    if (game_finished_winner) {
-        drawFinalScreen();
+    if (game_finished_looser || game_finished_winner) {
+        drawLooserScreen() || drawFinalScreen();
+        requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
     } else {
         drawBottles();
         drawChicken();
         drawBrownChicken();
         updateCaracter();
-        requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
+        requestAnimationFrame(draw); 
         drawEnergyBar();
         drawInfo();
         drawThrowBottle();
