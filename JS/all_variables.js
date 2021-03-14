@@ -25,6 +25,7 @@ let currentYellowChicken = 'img/littlechicken/yellowchicken1.png';
 let brownchickens = [];
 let currentBrownChicken = 'img/littlechicken/brownchicken1.png';
 
+let cloudOffset = 0; 
 let placedBottles = [1000, 1800, 2300, 2800, 3100, 3500, 4000];
 let collectedBottles = 0;
 let bottleThrowTime = 0;
