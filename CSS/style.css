@@ -108,7 +108,7 @@ canvas {
     z-index: 5;
     top: 128px;
     display: flex;
-    align-items: center; 
+    align-items: center;
     box-shadow: 5px 5px 5px darkslategrey;
     display: none; 
 }
@@ -122,9 +122,9 @@ canvas {
 }
 
 .instruction-btn {
-    width: 160px; 
-    margin-top: 60px; 
-    background-color: #E0A602; 
+    width: 160px;
+    margin-top: 60px;
+    background-color: #E0A602;
     font-size: 22px;
     padding: 5px;
     color: black;
@@ -132,4 +132,22 @@ canvas {
     font-family: 'Cubano', cursive;
     cursor: pointer;
     box-shadow: 5px 5px 5px darkslategrey;
+}
+
+.fullscreen-icon {
+    position: absolute; 
+    width: 40px;
+    top: 430px; 
+    left: 670px; 
+    cursor: pointer;
+}
+
+.fullscreen-icon-close {
+    position: absolute; 
+    width: 40px;
+    top: 430px; 
+    left: 670px; 
+    cursor: pointer;
+    display: none; 
+    z-index: 8; 
 }

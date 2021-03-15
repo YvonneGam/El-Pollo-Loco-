@@ -33,16 +33,19 @@ function finishLevel() {
     AUDIO_CHICKEN.play();
     setTimeout(function () {
         BACKGROUND_MUSIC.pause();
-        AUDIO_WIN.play();
+        if (enemy_energy < 0) {
+            game_finished_winner = true;
+            AUDIO_WIN.play();
+        }
     }, 1000);
-    /* if(enemy_energy < 0){ */
-    game_finished_winner = true;
+
     document.getElementById('restart_btn').classList.remove('d-none');
 }
 
 
-//Muss noch irgendwo aufgerufen werden!!!!!!
-
+/**
+ * This happens when the player loose all energy
+ */
 function looseLevel() {
     BACKGROUND_MUSIC.pause();
     AUDIO_LOOSE.play();
@@ -78,20 +81,9 @@ function checkForRunning() {
 }
 
 
-/* function jumpDirection() {
-    if (moveDirection == 'right') {
-        checkForJumping(characterGraphicsJump);
-    }
-     else {
-        let jump_image = characterGraphicsJump;
-        animateJump(jump_image);
-    } 
-} */
-
-
 function checkForJumping() {
     setInterval(function () {
-        if (isJumping) {
+        if (isJumping && moveDirection) {
             let index = characterGraphicJumpIndex % characterGraphicsJump.length;
             currentJumpImage = characterGraphicsJump[index];
             characterGraphicJumpIndex = characterGraphicJumpIndex + 1;
@@ -110,7 +102,7 @@ function draw() {
         drawChicken();
         drawBrownChicken();
         updateCaracter();
-        requestAnimationFrame(draw); 
+        requestAnimationFrame(draw);
         drawEnergyBar();
         drawInfo();
         drawThrowBottle();
@@ -324,3 +316,42 @@ function listenForKeys() {
         }
     });
 }
+
+
+/**
+ * This function opens the fullscreen.
+ */
+ function openFullscreen() {
+    /* document.getElementById('canvas-box').classList.add('d-none'); */
+    document.getElementById('fullscreen-icon').classList.add('d-none');
+    document.getElementById('keys-explanation').classList.add('d-none');
+    document.getElementById('head').classList.add('d-none');
+    document.getElementById('close-fullscreen').classList.remove('d-none');
+    
+  
+    if (canvas.requestFullscreen) {
+        canvas.requestFullscreen();
+    }
+    else if (canvas.webkitRequestFullscreen) { /* Safari */
+        canvas.webkitRequestFullscreen();
+    } else if (canvas.msRequestFullscreen) { /* IE11 */
+        canvas.msRequestFullscreen();
+    }
+  
+  }
+
+/**
+ * This function closes the fullscreen.
+ */
+ function closeFullscreen() {
+    document.getElementById('fullscreen-icon').classList.remove('d-none');
+    document.getElementById('close-fullscreen').classList.add('d-none');
+  
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+      document.msExitFullscreen();
+    }
+  }

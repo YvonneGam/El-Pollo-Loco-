@@ -21,16 +21,19 @@
 <body onload="init()">
 
 
-    <h1>El Pollo Loco</h1>
-    <div class="canvas-box">
+    <h1 id="head">El Pollo Loco</h1>
+    <div id="canvas-box" class="canvas-box">
         <canvas id="canvas" width="720" height="480"></canvas>
         <img class="startscreen" id="startscreen" src="img/startscreen.png">
         <button id="start_btn" class="start_btn" onclick="startGame()">Play Game</button>
         <button id="restart_btn" class="start_btn d-none" onclick="restartGame()">Play again</button>
         <button id="instruction_btn" class="game_instruction_btn" onclick="openInstruction()">Game Instruction</button>
+        <img id="fullscreen-icon" class="fullscreen-icon" onclick="openFullscreen()" src="img/fullscreen-icon.png">
+        <img id="close-fullscreen" class="fullscreen-icon-close" onclick="closeFullscreen()" src="img/fullscreen-icon-close.png">
+        
     </div>
 
-    <div class="keys-explanation">
+    <div id="keys-explanation" class="keys-explanation">
         <div class="clickbar">
             <img src="img/arrow-left.png">
             <div>Run left:<br> push arrow left</div>
@@ -52,11 +55,11 @@
 
     </div>
 
-    <div id="instruction_div" class="instruction-container">
+    <div id="instruction-div" class="instruction-container d-none">
         <div class="instruction">
             <h2>Game Instruction</h2>
             <span>
-                Collect minimum 5 bottles to scare ayway the enemy.
+                Collect minimum 5 bottles to scare away the enemy.
                 Throw these bottles against the enemy on the end of the game.
                 But take care of the chickens! Evade the chickens or you loose energy when you collide with them.
             </span>
