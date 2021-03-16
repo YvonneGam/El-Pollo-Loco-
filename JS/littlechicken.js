@@ -36,6 +36,7 @@ function createChickenList() {
         createYellowChicken(1, 3200, 350),
         createYellowChicken(2, 3800, 350),
         createYellowChicken(2, 5000, 350),
+        createYellowChicken(2, 5600, 350)
     ];
 }
 
@@ -95,7 +96,8 @@ function createBrownChickenList() {
         createBrownChicken(2, 2500, 350),
         createBrownChicken(1, 3600, 350),
         createBrownChicken(1, 4100, 350),
-        createBrownChicken(2, 4800, 350)
+        createBrownChicken(2, 4800, 350),
+        createBrownChicken(2, 5300, 350)
     ];
 }
 

@@ -1,14 +1,5 @@
 
 
-function preloadImages() {
-    for (let i = 0; i < imagePaths.length; i++) {
-        let image = new Image();
-        image.src = imagePaths[i];
-        images.push(image); // push image-path to images-array (which contains all image-paths)
-    }
-}
-
-
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -19,8 +10,10 @@ function init() {
     checkRunningBrownChicken();
     createBrownChickenList();
 
+    checkForSleeping(); 
     checkForRunning();
     checkForJumping();
+    
     draw();
     calculateCloudOffset();
     listenForKeys();
@@ -62,6 +55,9 @@ function looseLevel() {
 function checkForRunning() {
     setInterval(function () {
         if (isMovingRight) {
+            isJumping = false; 
+            moveDirectionRight = true;
+            moveDirectionLeft = false; 
             AUDIO_RUNNING.play();
             let index = characterGraphicIndex % characterGraphicsRight.length; // steht für den Rest (modulu)
             currentCharacterImage = characterGraphicsRight[index];
@@ -69,6 +65,8 @@ function checkForRunning() {
         }
 
         if (isMovingLeft) {
+            moveDirectionRight = false;
+            moveDirectionLeft = true; 
             AUDIO_RUNNING.play();
             let index = characterGraphicIndex % characterGraphicsLeft.length;
             currentCharacterImage = characterGraphicsLeft[index];
@@ -80,15 +78,58 @@ function checkForRunning() {
     }, 100);
 }
 
-
+/**
+ * The characters graphics change when the character us jumping
+ */
 function checkForJumping() {
-    setInterval(function () {
-        if (isJumping && moveDirection) {
-            let index = characterGraphicJumpIndex % characterGraphicsJump.length;
-            currentJumpImage = characterGraphicsJump[index];
-            characterGraphicJumpIndex = characterGraphicJumpIndex + 1;
+    let index;
+
+    setInterval(() => {
+        if (isJumping && moveDirectionRight) {
+/*             if (index == 6) {
+                isJumping = false;
+                index = 0;
+                characterGraphicIndex = 0;
+            } */
+            index = characterGraphicIndex % characterGraphicsJump.length;
+            currentCharacterImage = characterGraphicsJump[index];
+            characterGraphicIndex = characterGraphicIndex + 1;
         }
-    }, 80);
+
+        if (isJumping && moveDirectionLeft) {
+            index = characterGraphicIndex % characterGraphicsJump.length;
+            currentCharacterImage = characterGraphicsJump[index];
+            characterGraphicIndex = characterGraphicIndex + 1;
+        }
+    }, 150);
+}
+
+
+/**
+ * This function checks if the character is sleeping or not moving & shows sleeping images
+ */
+ function checkForSleeping() {
+    setInterval(function () {
+
+        let timePassed = (new Date().getTime() - lastKeyPressed);
+
+        if (lastKeyPressed != 0 && timePassed > 1500) {
+            console.log('lastKey');
+            characterSleep = true;
+            if (moveDirectionRight && !isJumping) {
+                let index = characterGraphicIndex % characterSleepRight.length;
+                currentCharacterImage = characterSleepRight[index];
+                characterGraphicIndex = characterGraphicIndex + 1;
+            } else if (moveDirectionLeft) {
+                let index = characterGraphicIndex % characterSleepRight.length;
+                currentCharacterImage = characterSleepRight[index];
+                characterGraphicIndex = characterGraphicIndex + 1;
+            }
+        } else {
+            characterSleep = false;
+        }
+
+    }, 200);
 }
 
 
@@ -250,8 +291,8 @@ function drawGround() {
 
     //Moving Clouds
     addBackgroundObject('img/floor/floor-background.png', 0, -60, 0.5);
-    addBackgroundObject('img/floor/floor-background.png', 1921, -60, 0.5);
-    addBackgroundObject('img/floor/floor-background.png', 3842, -60, 0.5);
+    addBackgroundObject('img/floor/floor-background.png', 1918, -60, 0.5);
+    addBackgroundObject('img/floor/floor-background.png', 3838, -60, 0.5);
     addBackgroundObject('img/floor/floor-background.png', 5763, -60, 0.5);
 }
 
@@ -270,65 +311,20 @@ function calculateCloudOffset() {
     }, 30);
 }
 
-/**
- * This function checks which key is clicked, so the animation works
- */
-function listenForKeys() {
-    // Hier wird gecheckt ob eine Taste gedrückt wird
-    document.addEventListener('keydown', e => {
-        const k = e.key;
-        /*         console.log(e.code == 'Space');
-                console.log(k);
-         */
-        if (k == 'ArrowRight') {
-            isMovingRight = true;
-        }
-        if (k == 'ArrowLeft') {
-            isMovingLeft = true;
-        }
-        if (k == 'b' && collectedBottles > 0) {
-            let timepassed = new Date().getTime() - bottleThrowTime;
-            if (timepassed > 1000) {
-                AUDIO_THROW.play();
-                collectedBottles--; //links oben wird eine Flasche abgezogen
-                bottleThrowTime = new Date().getTime(); //hier wird die Zeit ermittelt wo "b" gedrück wird um die Koordinaten zu wissen zum schmeißen
-            }
-        }
-
-
-        let timePassedSinceJump = new Date().getTime() - lastJumpStarted;
-        if (e.code == 'Space' && timePassedSinceJump > JUMP_TIME * 2) {
-            isJumping = true;
-            AUDIO_JUMPING.play();
-            lastJumpStarted = new Date().getTime();
-        }
-    });
-
-    // Hier wird gecheckt ob eine Taste losgelassen wird
-    document.addEventListener('keyup', e => {
-        const k = e.key;
-        /*      console.log(k); */
-        if (k == 'ArrowRight') {
-            isMovingRight = false;
-        }
-        if (k == 'ArrowLeft') {
-            isMovingLeft = false;
-        }
-    });
-}
 
 
 /**
  * This function opens the fullscreen.
  */
- function openFullscreen() {
+function openFullscreen() {
     /* document.getElementById('canvas-box').classList.add('d-none'); */
     document.getElementById('fullscreen-icon').classList.add('d-none');
     document.getElementById('keys-explanation').classList.add('d-none');
     document.getElementById('head').classList.add('d-none');
     document.getElementById('close-fullscreen').classList.remove('d-none');
-    
-  
+    BACKGROUND_MUSIC.play();
+
+
     if (canvas.requestFullscreen) {
         canvas.requestFullscreen();
     }
@@ -337,21 +333,44 @@ function listenForKeys() {
     } else if (canvas.msRequestFullscreen) { /* IE11 */
         canvas.msRequestFullscreen();
     }
-  
-  }
+
+}
 
 /**
  * This function closes the fullscreen.
  */
- function closeFullscreen() {
+function closeFullscreen() {
     document.getElementById('fullscreen-icon').classList.remove('d-none');
+    document.getElementById('keys-explanation').classList.remove('d-none');
+    document.getElementById('head').classList.remove('d-none');
     document.getElementById('close-fullscreen').classList.add('d-none');
-  
+    BACKGROUND_MUSIC.pause();
+
     if (document.exitFullscreen) {
-      document.exitFullscreen();
+        document.exitFullscreen();
     } else if (document.webkitExitFullscreen) { /* Safari */
-      document.webkitExitFullscreen();
+        document.webkitExitFullscreen();
     } else if (document.msExitFullscreen) { /* IE11 */
-      document.msExitFullscreen();
+        document.msExitFullscreen();
     }
-  }
+}
+
+/**
+ * This function adds the images to the canvas
+ * 
+ * @param {*} src 
+ * @param {*} offsetX 
+ * @param {*} bg_elements 
+ * @param {*} offsetY 
+ * @param {*} scale 
+ * @param {*} opacity 
+ */
+function addBackgroundobject(src, offsetX, bg_elements, offsetY, scale, opacity) {
+    if (opacity != undefined) {
+        ctx.globalAlpha = opacity;
+    }
+
+    let base_image = checkBackgroundImageCache(src);
+    ctx.drawImage(base_image, offsetX + bg_elements, offsetY, base_image.width * scale, base_image.height * scale);
+    ctx.globalAlpha = 1;
+}

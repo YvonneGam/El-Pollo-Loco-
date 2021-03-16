@@ -6,6 +6,8 @@ let character_energy = 80;
 let enemy_energy = 10;
 let isMovingRight = false;
 let isMovingLeft = false;
+let moveDirectionRight = true;
+let moveDirectionLeft = false; 
 let isJumping = false;
 let bg_elements = 0;
 let lastJumpStarted = 0;
@@ -16,8 +18,11 @@ let characterGraphicIndex = 0;
 
 let currentJumpImage = 'img/character/J-33.png';
 let characterGraphicsJump = ['img/character/J-33.png', 'img/character/J-34.png', 'img/character/J-35.png', 'img/character/J-36.png', 'img/character/J-37.png', 'img/character/J-38.png'];
-let characterGraphicJumpIndex = 0;
-let moveDirection = 'right';
+let characterGraphicsJumpLeft = ['img/character/J-33.png', 'img/character/J-34.png', 'img/character/J-35.png', 'img/character/J-36.png' /* 'img/character/J-37.png', 'img/character/J-38.png' */];
+
+let characterSleepRight = ['img/character/I-11.png', 'img/character/I-12.png', 'img/character/I-13.png', 'img/character/I-14.png', 'img/character/I-15.png', 'img/character/I-16.png', 'img/character/I-17.png', 'img/character/I-18.png', 'img/character/I-19.png', 'img/character/I-20.png',]
+let characterSleep = false; 
+let lastKeyPressed = 0;
 
 let chickens = [];
 let currentYellowChicken = 'img/littlechicken/yellowchicken1.png';
@@ -26,7 +31,7 @@ let brownchickens = [];
 let currentBrownChicken = 'img/littlechicken/brownchicken1.png';
 
 let cloudOffset = 0; 
-let placedBottles = [1000, 1800, 2300, 2800, 3100, 3500, 4000];
+let placedBottles = [1000, 1800, 2300, 2800, 3100, 3500, 4000, 4800, 5400];
 let collectedBottles = 0;
 let bottleThrowTime = 0;
 let throwBottle_x = 0;
@@ -36,10 +41,11 @@ let game_finished_winner = false;
 let game_finished_looser = false;
 let character_lost_at = 0;
 
+
 //Game config
 let JUMP_TIME = 300; //in Millisekunden
 let GAME_SPEED = 6;
-let BOSS_POSITION = 5500;
+let BOSS_POSITION = 6500;
 let AUDIO_RUNNING = new Audio('audio/running_mp3.mp3');
 let AUDIO_JUMPING = new Audio('audio/jump.mp3');
 let AUDIO_BOTTLE = new Audio('audio/bottle.mp3');
