@@ -1,25 +1,47 @@
 
 
-
+/**
+ * This function shows the canvas & the input
+ */
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+    preloadImages();
+    draw();
+
+}
+
+/**
+ * This function starts the game the Button "Play Game" is klicked
+ */
+function loadGame() {
     checkRunningYellowChicken();
     createChickenList();
 
     checkRunningBrownChicken();
     createBrownChickenList();
 
-    checkForSleeping(); 
+    checkForSleeping();
     checkForRunning();
-    checkForJumping();
-    
-    draw();
+    setInterval(checkForJumping(), 150);
+
     calculateCloudOffset();
     listenForKeys();
     calculateChickenPosition();
     calculateBrownChickenPosition()
     checkForCollision();
+}
+
+
+function checkRunOrJump() {
+    if (character_y < 110) {
+        isJumping = true;
+        console.log('jump');
+    } else {
+        isJumping = false;
+        console.log('on earth');
+    }
+
 }
 
 function finishLevel() {
@@ -29,6 +51,11 @@ function finishLevel() {
         if (enemy_energy < 0) {
             game_finished_winner = true;
             AUDIO_WIN.play();
+        }
+        else {
+            AUDIO_LOOSE.play();
+            game_finished_looser = true;
+
         }
     }, 1000);
 
@@ -42,9 +69,12 @@ function finishLevel() {
 function looseLevel() {
     BACKGROUND_MUSIC.pause();
     AUDIO_LOOSE.play();
-    game_finished_looser = true;
-    console.log('Verloren');
-    document.getElementById('restart_btn').classList.remove('d-none');
+    setTimeout(function () {
+        game_finished_looser = true;
+        console.log('Verloren');
+        document.getElementById('restart_btn').classList.remove('d-none');
+        AUDIO_LOOSE.pause();
+    }, 3500);
 }
 
 
@@ -55,9 +85,9 @@ function looseLevel() {
 function checkForRunning() {
     setInterval(function () {
         if (isMovingRight) {
-            isJumping = false; 
+            isJumping = false;
             moveDirectionRight = true;
-            moveDirectionLeft = false; 
+            moveDirectionLeft = false;
             AUDIO_RUNNING.play();
             let index = characterGraphicIndex % characterGraphicsRight.length; // steht für den Rest (modulu)
             currentCharacterImage = characterGraphicsRight[index];
@@ -66,7 +96,7 @@ function checkForRunning() {
 
         if (isMovingLeft) {
             moveDirectionRight = false;
-            moveDirectionLeft = true; 
+            moveDirectionLeft = true;
             AUDIO_RUNNING.play();
             let index = characterGraphicIndex % characterGraphicsLeft.length;
             currentCharacterImage = characterGraphicsLeft[index];
@@ -79,19 +109,14 @@ function checkForRunning() {
 }
 
 /**
- * The characters graphics change when the character us jumping
+ * The characters graphics change when the character is jumping
  */
 function checkForJumping() {
-    let index;
 
-    setInterval(() => {
+    setInterval(function () {
         if (isJumping && moveDirectionRight) {
-/*             if (index == 6) {
-                isJumping = false;
-                index = 0;
-                characterGraphicIndex = 0;
-            } */
-            index = characterGraphicIndex % characterGraphicsJump.length;
+
+            let index = characterGraphicIndex % characterGraphicsJump.length;
             currentCharacterImage = characterGraphicsJump[index];
             characterGraphicIndex = characterGraphicIndex + 1;
         }
@@ -108,7 +133,7 @@ function checkForJumping() {
 /**
  * This function checks if the character is sleeping or not moving & shows sleeping images
  */
- function checkForSleeping() {
+function checkForSleeping() {
     setInterval(function () {
 
         let timePassed = (new Date().getTime() - lastKeyPressed);
@@ -135,9 +160,13 @@ function checkForJumping() {
 
 function draw() {
     updateFloor();
-    if (game_finished_looser || game_finished_winner) {
-        drawLooserScreen() || drawFinalScreen();
+    if (game_finished_looser) {
+        drawLooserScreen();
         requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
+        if (game_finished_winner) {
+            drawFinalScreen();
+            requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
+        }
     } else {
         drawBottles();
         drawChicken();
@@ -157,7 +186,6 @@ function drawFinalScreen() {
     if (base_image_screen2.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
         ctx.drawImage(base_image_screen2, 0, 0, base_image_screen2.width * 1, base_image_screen2.height * 1);
     }
-    console.log('gewonnen');
 }
 
 function drawLooserScreen() {

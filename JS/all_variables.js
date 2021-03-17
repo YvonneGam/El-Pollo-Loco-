@@ -44,6 +44,7 @@ let character_lost_at = 0;
 
 //Game config
 let JUMP_TIME = 300; //in Millisekunden
+let WHOLE_JUMP_TIME = JUMP_TIME + JUMP_TIME * 1.9;
 let GAME_SPEED = 6;
 let BOSS_POSITION = 6500;
 let AUDIO_RUNNING = new Audio('audio/running_mp3.mp3');
@@ -54,6 +55,7 @@ let AUDIO_CHICKEN = new Audio('audio/chicken.mp3');
 let AUDIO_GLASS = new Audio('audio/breaking_bottle.mp3');
 let AUDIO_WIN = new Audio('audio/win.mp3');
 let AUDIO_LOOSE = new Audio('audio/Looser.mp3');
+let AUDIO_OHOH = new Audio('audio/ohoh.mp3');
 AUDIO_WIN.volume = 0.6;
 let BACKGROUND_MUSIC = new Audio('audio/background-sound.mp3');
 BACKGROUND_MUSIC.loop = true;

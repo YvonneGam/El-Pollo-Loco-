@@ -3,6 +3,7 @@ function startGame() {
     document.getElementById('start_btn').classList.add('d-none');
     document.getElementById('instruction_btn').classList.add('d-none');
     document.getElementById('fullscreen-icon').classList.add('d-none');
+    loadGame();
     BACKGROUND_MUSIC.play();
 }
 

@@ -22,6 +22,7 @@ function collisionYellowChicken() {
             if (character_y > 95) //Wenn die y-Koordinate des Characters größer als 95 ist dann wird keine Energie abgezogen, da man dann hoch genug gesprungen ist
                 if (character_energy > 0) {
                     character_energy = character_energy - 10;  //1 Energie-Element wird abgezogen bei Collision
+                    AUDIO_OHOH.play(); 
                 } else {
                     character_lost_at = new Date().getTime();
                     game_finished_looser = true;
@@ -42,6 +43,7 @@ function collisionBrownChicken() {
             if (character_y > 95) //Wenn die y-Koordinate des Characters größer als 95 ist dann wird keine Energie abgezogen, da man dann hoch genug gesprungen ist
                 if (character_energy > 0) {
                     character_energy = character_energy - 10;  //1 Energie-Element wird abgezogen bei Collision
+                    AUDIO_OHOH.play(); 
                 } else {
                     character_lost_at = new Date().getTime();
                     game_finished_looser = true;
