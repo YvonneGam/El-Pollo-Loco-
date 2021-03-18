@@ -2,7 +2,7 @@ let canvas;
 let ctx; //context
 let character_x = 75;
 let character_y = 125;
-let character_energy = 80;
+let character_energy = 100;
 let enemy_energy = 10;
 let isMovingRight = false;
 let isMovingLeft = false;

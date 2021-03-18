@@ -1,12 +1,12 @@
 /**
  * This function checks when the character collide with the items
  */
- function checkForCollision() {
+function checkForCollision() {
     setInterval(function () {
         collisionYellowChicken();
         collisionBrownChicken();
         collisionBottles();
-        collisionEnemy(); 
+        collisionEnemy();
 
     }, 100);
 }
@@ -20,13 +20,12 @@ function collisionYellowChicken() {
         let chicken_x = chicken.position_x + bg_elements; //Position des Hühnchens + Position des Hintergrundes, da nur er sich verschiebt und nicht der Character
         if ((chicken_x - 40) < character_x && (chicken_x + 40) > character_x) { //Ist die Koordinate der Chicken-10 kleiner als die x-Koordiante der Person & ist die Koordinate der Chicken+10 größer als die Person, also 20 Unterschied, dann Kollision!
             if (character_y > 95) //Wenn die y-Koordinate des Characters größer als 95 ist dann wird keine Energie abgezogen, da man dann hoch genug gesprungen ist
-                if (character_energy > 0) {
+                if (character_energy >= 0) {
                     character_energy = character_energy - 10;  //1 Energie-Element wird abgezogen bei Collision
-                    AUDIO_OHOH.play(); 
+                    AUDIO_OHOH.play();
                 } else {
                     character_lost_at = new Date().getTime();
                     game_finished_looser = true;
-                    looseLevel();
                 }
         }
     }
@@ -43,11 +42,10 @@ function collisionBrownChicken() {
             if (character_y > 95) //Wenn die y-Koordinate des Characters größer als 95 ist dann wird keine Energie abgezogen, da man dann hoch genug gesprungen ist
                 if (character_energy > 0) {
                     character_energy = character_energy - 10;  //1 Energie-Element wird abgezogen bei Collision
-                    AUDIO_OHOH.play(); 
+                    AUDIO_OHOH.play();
                 } else {
                     character_lost_at = new Date().getTime();
                     game_finished_looser = true;
-                    looseLevel();
                 }
         }
     }
@@ -80,7 +78,7 @@ function collisionEnemy() {
             AUDIO_GLASS.play();
         } else if (enemyDefeatedAt == 0) {
             enemyDefeatedAt = new Date().getTime();
-            finishLevel();
+             game_finished_winner = true; 
         }
     }
 }

@@ -45,21 +45,15 @@ function checkRunOrJump() {
 }
 
 function finishLevel() {
+    BACKGROUND_MUSIC.pause();
     AUDIO_CHICKEN.play();
     setTimeout(function () {
-        BACKGROUND_MUSIC.pause();
-        if (enemy_energy < 0) {
-            game_finished_winner = true;
-            AUDIO_WIN.play();
-        }
-        else {
-            AUDIO_LOOSE.play();
-            game_finished_looser = true;
-
-        }
-    }, 1000);
-
-    document.getElementById('restart_btn').classList.remove('d-none');
+        game_finished_winner = true;
+        AUDIO_WIN.play();
+        console.log('hurraa');
+        document.getElementById('restart_btn').classList.remove('d-none');
+        AUDIO_CHICKEN.pause();
+    }, 2000);
 }
 
 
@@ -73,10 +67,8 @@ function looseLevel() {
         game_finished_looser = true;
         console.log('Verloren');
         document.getElementById('restart_btn').classList.remove('d-none');
-        AUDIO_LOOSE.pause();
-    }, 3500);
+    }, 2000);
 }
-
 
 
 /**
@@ -160,13 +152,16 @@ function checkForSleeping() {
 
 function draw() {
     updateFloor();
-    if (game_finished_looser) {
+    if (game_finished_winner) {
+        console.log('winner');
+        finishLevel();
+        drawFinalScreen();
+        requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
+    } else if (game_finished_looser) {
+        console.log('looser');
+        looseLevel();
         drawLooserScreen();
         requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
-        if (game_finished_winner) {
-            drawFinalScreen();
-            requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
-        }
     } else {
         drawBottles();
         drawChicken();
@@ -186,6 +181,7 @@ function drawFinalScreen() {
     if (base_image_screen2.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
         ctx.drawImage(base_image_screen2, 0, 0, base_image_screen2.width * 1, base_image_screen2.height * 1);
     }
+    console.log('finalscreen');
 }
 
 function drawLooserScreen() {
@@ -194,6 +190,7 @@ function drawLooserScreen() {
     if (base_image_screen.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
         ctx.drawImage(base_image_screen, 0, 0, base_image_screen.width * 1, base_image_screen.height * 1);
     }
+    console.log('looserscreen');
 }
 
 function drawEnemy() {
@@ -215,13 +212,6 @@ function drawEnemy() {
         ctx.globalAlpha = 1;
         ctx.fillStyle = "orange"
         ctx.fillRect(BOSS_POSITION + 65 + bg_elements, 98, 2 * enemy_energy, 25) //x-koordinate, y-koordinate, breite, höhe
-
-        //Heart in Front of the enemy energy-bar
-        /*        let base_image_life = new Image();
-               base_image_life.src = 'img/heart-life-enemy.png';
-               if (base_image_life.complete) { 
-                   ctx.drawImage(base_image_life, 440, 15, base_image_life.width * 0.25, base_image_life.height * 0.25);
-               } */
     }
 }
 
