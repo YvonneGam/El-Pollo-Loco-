@@ -8,6 +8,7 @@ function init() {
     ctx = canvas.getContext('2d');
     preloadImages();
     draw();
+    checkRunOrJump(); 
 
 }
 
@@ -107,6 +108,7 @@ function checkForJumping() {
 
     setInterval(function () {
         if (isJumping && moveDirectionRight) {
+            console.log('is jumping');
 
             let index = characterGraphicIndex % characterGraphicsJump.length;
             currentCharacterImage = characterGraphicsJump[index];
@@ -130,7 +132,7 @@ function checkForSleeping() {
 
         let timePassed = (new Date().getTime() - lastKeyPressed);
 
-        if (lastKeyPressed != 0 && timePassed > 1500) {
+        if (lastKeyPressed != 0 && timePassed > 1500) { //wenn Pepe länger als 1500ms still steht kommen die Schlafanmiationen
             console.log('lastKey');
             characterSleep = true;
             if (moveDirectionRight && !isJumping) {
@@ -152,7 +154,7 @@ function checkForSleeping() {
 
 function draw() {
     updateFloor();
-    if (game_finished_winner) {
+    if (game_finished_winner) { 
         console.log('winner');
         finishLevel();
         drawFinalScreen();
@@ -276,7 +278,6 @@ function updateCaracter() {
     if (timePassedSinceJump < JUMP_TIME) { //Sprung
         character_y = character_y - 10; //Hier werden 10 abgezogen, da das Canvas immer von oben nach unten gerechnet wird, anders als normale Koordinatensysteme
     } else { //Check falling
-
         if (character_y < 125) {
             character_y = character_y + 10;
         }
@@ -336,11 +337,12 @@ function calculateCloudOffset() {
  */
 function openFullscreen() {
     /* document.getElementById('canvas-box').classList.add('d-none'); */
-    document.getElementById('fullscreen-icon').classList.add('d-none');
+/*     document.getElementById('fullscreen-icon').classList.add('d-none');  */
     document.getElementById('keys-explanation').classList.add('d-none');
-    document.getElementById('head').classList.add('d-none');
+    document.getElementById('head').classList.add('d-none'); 
     document.getElementById('close-fullscreen').classList.remove('d-none');
     BACKGROUND_MUSIC.play();
+    loadGame(); 
 
 
     if (canvas.requestFullscreen) {
@@ -363,12 +365,13 @@ function closeFullscreen() {
     document.getElementById('head').classList.remove('d-none');
     document.getElementById('close-fullscreen').classList.add('d-none');
     BACKGROUND_MUSIC.pause();
+    location.reload();
 
     if (document.exitFullscreen) {
         document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) { /* Safari */
+    } else if (document.webkitExitFullscreen) { 
         document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { /* IE11 */
+    } else if (document.msExitFullscreen) { 
         document.msExitFullscreen();
     }
 }

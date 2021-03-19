@@ -145,9 +145,17 @@ canvas {
 .fullscreen-icon-close {
     position: absolute; 
     width: 40px;
-    top: 430px; 
-    left: 670px; 
+    top: 720px; 
+    left: 1000px; 
     cursor: pointer;
-    display: none; 
     z-index: 8; 
+    display: none; 
+}
+
+.speaker {
+    position: absolute; 
+    width: 40px;
+    top: 430px; 
+    left: 20px; 
+    cursor: pointer;
 }

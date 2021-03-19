@@ -2,7 +2,7 @@ let canvas;
 let ctx; //context
 let character_x = 75;
 let character_y = 125;
-let character_energy = 100;
+let character_energy = 80;
 let enemy_energy = 10;
 let isMovingRight = false;
 let isMovingLeft = false;
@@ -44,7 +44,7 @@ let character_lost_at = 0;
 
 //Game config
 let JUMP_TIME = 300; //in Millisekunden
-let WHOLE_JUMP_TIME = JUMP_TIME + JUMP_TIME * 1.9;
+/* let WHOLE_JUMP_TIME = JUMP_TIME + JUMP_TIME * 1.9; */
 let GAME_SPEED = 6;
 let BOSS_POSITION = 6500;
 let AUDIO_RUNNING = new Audio('audio/running_mp3.mp3');

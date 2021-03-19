@@ -23,7 +23,7 @@
 
 
         let timePassedSinceJump = new Date().getTime() - lastJumpStarted;
-        if (e.code == 'Space' && timePassedSinceJump > WHOLE_JUMP_TIME) {
+        if (e.code == 'Space' && timePassedSinceJump > JUMP_TIME * 2) {
             isJumping = true;
             AUDIO_JUMPING.play();
             lastJumpStarted = new Date().getTime();
@@ -41,6 +41,11 @@
         }
         if (k == 'ArrowLeft') {
             isMovingLeft = false;
+        }
+
+        if (e.code == 'Space') {
+            isJumping = false; 
+            console.log('is jumping false'); 
         }
     });
 }
