@@ -42,7 +42,6 @@
         if (k == 'ArrowLeft') {
             isMovingLeft = false;
         }
-
         if (e.code == 'Space') {
             isJumping = false; 
             console.log('is jumping false'); 

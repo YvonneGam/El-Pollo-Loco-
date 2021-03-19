@@ -8,7 +8,7 @@ function init() {
     ctx = canvas.getContext('2d');
     preloadImages();
     draw();
-    checkRunOrJump(); 
+    checkRunOrJump();
 
 }
 
@@ -24,7 +24,8 @@ function loadGame() {
 
     checkForSleeping();
     checkForRunning();
-    setInterval(checkForJumping(), 150);
+    /* setInterval(checkForJumping(), 150); */
+    checkForJumping();
 
     calculateCloudOffset();
     listenForKeys();
@@ -120,7 +121,16 @@ function checkForJumping() {
             currentCharacterImage = characterGraphicsJump[index];
             characterGraphicIndex = characterGraphicIndex + 1;
         }
-    }, 150);
+
+
+/*         if (isJumping) {
+
+            let index = characterGraphicIndex % characterGraphicsJump.length;
+            currentCharacterImage = characterGraphicsJump[index];
+            characterGraphicIndex = characterGraphicIndex + 1;
+            console.log(isJumping, index);
+        } */
+    });
 }
 
 
@@ -154,16 +164,16 @@ function checkForSleeping() {
 
 function draw() {
     updateFloor();
-    if (game_finished_winner) { 
+    if (game_finished_winner) {
         console.log('winner');
         finishLevel();
         drawFinalScreen();
-        requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
+        requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert) 
     } else if (game_finished_looser) {
         console.log('looser');
         looseLevel();
         drawLooserScreen();
-        requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert)
+        requestAnimationFrame(draw); //Diese function zeichnet automatisch die Daten je nach Leistung der Grafikkarte (ist nirgends definiert) 
     } else {
         drawBottles();
         drawChicken();
@@ -337,12 +347,12 @@ function calculateCloudOffset() {
  */
 function openFullscreen() {
     /* document.getElementById('canvas-box').classList.add('d-none'); */
-/*     document.getElementById('fullscreen-icon').classList.add('d-none');  */
+    /*     document.getElementById('fullscreen-icon').classList.add('d-none');  */
     document.getElementById('keys-explanation').classList.add('d-none');
-    document.getElementById('head').classList.add('d-none'); 
+    document.getElementById('head').classList.add('d-none');
     document.getElementById('close-fullscreen').classList.remove('d-none');
     BACKGROUND_MUSIC.play();
-    loadGame(); 
+    loadGame();
 
 
     if (canvas.requestFullscreen) {
@@ -369,12 +379,14 @@ function closeFullscreen() {
 
     if (document.exitFullscreen) {
         document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) { 
+    } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { 
+    } else if (document.msExitFullscreen) {
         document.msExitFullscreen();
     }
 }
+
+
 
 /**
  * This function adds the images to the canvas

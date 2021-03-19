@@ -14,7 +14,8 @@ function restartGame() {
 
 
 function openInstruction() {
-    document.getElementById('instruction_btn').classList.remove('d-none');
+    document.getElementById('instruction-div').classList.remove('d-none');
+    console.log(document.getElementById("instruction-div"));
 }
 
 function closeInstruction() {

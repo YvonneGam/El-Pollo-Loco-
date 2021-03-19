@@ -16,6 +16,8 @@ let characterGraphicsRight = ['img/character/character_move1.png', 'img/characte
 let characterGraphicsLeft = ['img/character/character_move1-left.png', 'img/character/character_move2-left.png', 'img/character/character_move3-left.png', 'img/character/character_move4-left.png', 'img/character/character_move5-left.png', 'img/character/character_move6-left.png'];
 let characterGraphicIndex = 0;
 
+let currentAnimationImage = [base_image];
+
 let currentJumpImage = 'img/character/J-33.png';
 let characterGraphicsJump = ['img/character/J-33.png', 'img/character/J-34.png', 'img/character/J-35.png', 'img/character/J-36.png', 'img/character/J-37.png', 'img/character/J-38.png'];
 let characterGraphicsJumpLeft = ['img/character/J-33.png', 'img/character/J-34.png', 'img/character/J-35.png', 'img/character/J-36.png' /* 'img/character/J-37.png', 'img/character/J-38.png' */];
@@ -59,4 +61,4 @@ let AUDIO_OHOH = new Audio('audio/ohoh.mp3');
 AUDIO_WIN.volume = 0.6;
 let BACKGROUND_MUSIC = new Audio('audio/background-sound.mp3');
 BACKGROUND_MUSIC.loop = true;
-BACKGROUND_MUSIC.volume = 0.3;
+BACKGROUND_MUSIC.volume = 0.1;

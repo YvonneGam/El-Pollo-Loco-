@@ -84,7 +84,7 @@ canvas {
 }
 
 .d-none {
-    display: none;
+    display: none !important;
 }
 
 .game_instruction_btn {
@@ -110,7 +110,6 @@ canvas {
     display: flex;
     align-items: center;
     box-shadow: 5px 5px 5px darkslategrey;
-    display: none; 
 }
 
 .instruction {
