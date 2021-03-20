@@ -23,7 +23,7 @@
 <body onload="init()">
 
 
-    <h1 id="head">El Pollo Loco</h1>
+<!--     <h1 id="head">El Pollo Loco</h1> -->
     <div id="canvas-box" class="canvas-box">
         <canvas id="canvas" width="720" height="480"></canvas>
         <img class="startscreen" id="startscreen" src="img/startscreen.png">
@@ -32,7 +32,8 @@
         <button id="instruction_btn" class="game_instruction_btn" onclick="openInstruction()">Game Instruction</button>
         <img id="fullscreen-icon" class="fullscreen-icon" onclick="openFullscreen()" src="img/fullscreen-icon.png">
         <img id="close-fullscreen" class="fullscreen-icon-close" onclick="closeFullscreen()" src="img/fullscreen-icon-close.png">
-        <img id="speaker-icon" class="speaker" onclick="muteSound()" src="img/speaker.png">
+        <img id="speaker-icon" class="speaker d-none" onclick="muteSound()" src="img/speaker.png">
+        <img id="mute-sound" class="speaker d-none" onclick="playSound()" src="img/mute-sound.png">
     </div>
 
     <div id="keys-explanation" class="keys-explanation">
@@ -42,7 +43,7 @@
         </div>
         <div class="clickbar">
             <img src="img/arrow-right.png">
-            <div>Run left:<br> push arrow right</div>
+            <div>Run right:<br> push arrow right</div>
         </div>
 
         <div class="clickbar">

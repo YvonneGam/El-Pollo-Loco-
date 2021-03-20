@@ -38,7 +38,7 @@ canvas {
     font-size: 14px;
     text-align: center;
     width: 720px;
-    margin-top: 40px;
+    margin-top: 30px;
 }
 
 .clickbar {
@@ -106,7 +106,7 @@ canvas {
     width: 680px;
     height: 440px;
     z-index: 5;
-    top: 128px;
+    top: 26px;
     display: flex;
     align-items: center;
     box-shadow: 5px 5px 5px darkslategrey;

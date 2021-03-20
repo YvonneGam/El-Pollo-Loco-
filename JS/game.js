@@ -43,7 +43,6 @@ function checkRunOrJump() {
         isJumping = false;
         console.log('on earth');
     }
-
 }
 
 function finishLevel() {
@@ -108,29 +107,31 @@ function checkForRunning() {
 function checkForJumping() {
 
     setInterval(function () {
+        let index;
+
         if (isJumping && moveDirectionRight) {
-            console.log('is jumping');
-
-            let index = characterGraphicIndex % characterGraphicsJump.length;
+            if (index == 4) {
+                isJumping = false;
+                index = 0;
+                characterGraphicJumpIndex = 0;
+            }
+            console.log('is jumping right');
+            index = characterGraphicJumpIndex % characterGraphicsJump.length;
             currentCharacterImage = characterGraphicsJump[index];
-            characterGraphicIndex = characterGraphicIndex + 1;
+            characterGraphicJumpIndex = characterGraphicJumpIndex + 1;
         }
-
         if (isJumping && moveDirectionLeft) {
-            index = characterGraphicIndex % characterGraphicsJump.length;
-            currentCharacterImage = characterGraphicsJump[index];
+            if (index == 4) {
+                isJumping = false;
+                index = 0;
+                characterGraphicJumpIndex = 0;
+            }
+            index = characterGraphicIndex % characterGraphicsJumpLeft.length;
+            currentCharacterImage = characterGraphicsJumpLeft[index];
             characterGraphicIndex = characterGraphicIndex + 1;
         }
 
-
-/*         if (isJumping) {
-
-            let index = characterGraphicIndex % characterGraphicsJump.length;
-            currentCharacterImage = characterGraphicsJump[index];
-            characterGraphicIndex = characterGraphicIndex + 1;
-            console.log(isJumping, index);
-        } */
-    });
+    }, 200);
 }
 
 
@@ -142,20 +143,22 @@ function checkForSleeping() {
 
         let timePassed = (new Date().getTime() - lastKeyPressed);
 
-        if (lastKeyPressed != 0 && timePassed > 1500) { //wenn Pepe länger als 1500ms still steht kommen die Schlafanmiationen
+        if (lastKeyPressed != 0 && timePassed > 1800) { //wenn Pepe länger als 1500ms still steht kommen die Schlafanmiationen
             console.log('lastKey');
             characterSleep = true;
+            AUDIO_SLEEP.play();
             if (moveDirectionRight && !isJumping) {
                 let index = characterGraphicIndex % characterSleepRight.length;
                 currentCharacterImage = characterSleepRight[index];
                 characterGraphicIndex = characterGraphicIndex + 1;
             } else if (moveDirectionLeft) {
-                let index = characterGraphicIndex % characterSleepRight.length;
-                currentCharacterImage = characterSleepRight[index];
+                let index = characterGraphicIndex % characterSleepLeft.length;
+                currentCharacterImage = characterSleepLeft[index];
                 characterGraphicIndex = characterGraphicIndex + 1;
             }
         } else {
             characterSleep = false;
+            AUDIO_SLEEP.pause();
         }
 
     }, 200);
@@ -286,10 +289,16 @@ function updateCaracter() {
 
     let timePassedSinceJump = new Date().getTime() - lastJumpStarted;
     if (timePassedSinceJump < JUMP_TIME) { //Sprung
+        isJumping = true;
         character_y = character_y - 10; //Hier werden 10 abgezogen, da das Canvas immer von oben nach unten gerechnet wird, anders als normale Koordinatensysteme
+        characterGraphicsJumpIndex = 0;
     } else { //Check falling
         if (character_y < 125) {
+            isJumping = true;
             character_y = character_y + 10;
+        }
+        else {
+            isJumping = false;
         }
         if (base_image.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig geladen ist, ansonten "false"
             ctx.drawImage(base_image, character_x, character_y, base_image.width * 0.25, base_image.height * 0.25);
@@ -303,6 +312,7 @@ function updateCaracter() {
  */
 function updateFloor() {
     drawGround();
+    addBackgroundObject('img/floor/cloud.png', -1000 - cloudOffset, -60, 0.5, 0.5);
     addBackgroundObject('img/floor/cloud.png', 0 - cloudOffset, -60, 0.5, 0.5);
     addBackgroundObject('img/floor/cloud.png', 1921 - cloudOffset, -60, 0.5, 0.5);
     addBackgroundObject('img/floor/cloud.png', 3842 - cloudOffset, -60, 0.5, 0.5);
@@ -326,10 +336,10 @@ function drawGround() {
 }
 
 function addBackgroundObject(src, offsetX, offsetY, scale) {
-    let base_image_floor = new Image();
-    base_image_floor.src = src;
-    if (base_image_floor.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
-        ctx.drawImage(base_image_floor, offsetX + bg_elements, offsetY, base_image_floor.width * scale, base_image_floor.height * scale);
+    let base_image = new Image();
+    base_image.src = src;
+    if (base_image.complete) { //gibt den Wert "true" zurück, wenn das Bild fertig gelaen ist, ansonten "false"
+        ctx.drawImage(base_image, offsetX + bg_elements, offsetY, base_image.width * scale, base_image.height * scale);
     }
 }
 
@@ -349,11 +359,9 @@ function openFullscreen() {
     /* document.getElementById('canvas-box').classList.add('d-none'); */
     /*     document.getElementById('fullscreen-icon').classList.add('d-none');  */
     document.getElementById('keys-explanation').classList.add('d-none');
-    document.getElementById('head').classList.add('d-none');
     document.getElementById('close-fullscreen').classList.remove('d-none');
     BACKGROUND_MUSIC.play();
     loadGame();
-
 
     if (canvas.requestFullscreen) {
         canvas.requestFullscreen();
@@ -398,7 +406,7 @@ function closeFullscreen() {
  * @param {*} scale 
  * @param {*} opacity 
  */
-function addBackgroundobject(src, offsetX, bg_elements, offsetY, scale, opacity) {
+/* function addBackgroundobject(src, offsetX, bg_elements, offsetY, scale, opacity) {
     if (opacity != undefined) {
         ctx.globalAlpha = opacity;
     }
@@ -406,4 +414,28 @@ function addBackgroundobject(src, offsetX, bg_elements, offsetY, scale, opacity)
     let base_image = checkBackgroundImageCache(src);
     ctx.drawImage(base_image, offsetX + bg_elements, offsetY, base_image.width * scale, base_image.height * scale);
     ctx.globalAlpha = 1;
+}
+
+ */
+/**
+ * Check if background-image is already loaded in cache; if not, create new image
+ * @param {*} src_path 
+ */
+
+function getBackgroundImageFromCache(src_path) {
+
+    // Check if image is found in images-array.
+
+    base_image = images.find(function (img) {
+        return img.src.endsWith(src_path.substring(src_path, src_path.length));
+
+    })
+
+    //  Create new image if not found in cache
+
+    if (!base_image) {
+        base_image = new Image();
+        base_image.src = src_path;
+    }
+
 }
