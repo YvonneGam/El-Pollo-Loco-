@@ -143,7 +143,7 @@ function checkForSleeping() {
 
         let timePassed = (new Date().getTime() - lastKeyPressed);
 
-        if (lastKeyPressed != 0 && timePassed > 1800) { //wenn Pepe länger als 1500ms still steht kommen die Schlafanmiationen
+        if (lastKeyPressed != 0 && timePassed > 1500) { //wenn Pepe länger als 1500ms still steht kommen die Schlafanmiationen
             console.log('lastKey');
             characterSleep = true;
             AUDIO_SLEEP.play();
@@ -312,7 +312,6 @@ function updateCaracter() {
  */
 function updateFloor() {
     drawGround();
-    addBackgroundObject('img/floor/cloud.png', -1000 - cloudOffset, -60, 0.5, 0.5);
     addBackgroundObject('img/floor/cloud.png', 0 - cloudOffset, -60, 0.5, 0.5);
     addBackgroundObject('img/floor/cloud.png', 1921 - cloudOffset, -60, 0.5, 0.5);
     addBackgroundObject('img/floor/cloud.png', 3842 - cloudOffset, -60, 0.5, 0.5);
@@ -350,49 +349,6 @@ function calculateCloudOffset() {
     }, 30);
 }
 
-
-
-/**
- * This function opens the fullscreen.
- */
-function openFullscreen() {
-    /* document.getElementById('canvas-box').classList.add('d-none'); */
-    /*     document.getElementById('fullscreen-icon').classList.add('d-none');  */
-    document.getElementById('keys-explanation').classList.add('d-none');
-    document.getElementById('close-fullscreen').classList.remove('d-none');
-    BACKGROUND_MUSIC.play();
-    loadGame();
-
-    if (canvas.requestFullscreen) {
-        canvas.requestFullscreen();
-    }
-    else if (canvas.webkitRequestFullscreen) { /* Safari */
-        canvas.webkitRequestFullscreen();
-    } else if (canvas.msRequestFullscreen) { /* IE11 */
-        canvas.msRequestFullscreen();
-    }
-
-}
-
-/**
- * This function closes the fullscreen.
- */
-function closeFullscreen() {
-    document.getElementById('fullscreen-icon').classList.remove('d-none');
-    document.getElementById('keys-explanation').classList.remove('d-none');
-    document.getElementById('head').classList.remove('d-none');
-    document.getElementById('close-fullscreen').classList.add('d-none');
-    BACKGROUND_MUSIC.pause();
-    location.reload();
-
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-    }
-}
 
 
 
